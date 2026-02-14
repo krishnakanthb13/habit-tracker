@@ -75,6 +75,7 @@ habit-tracker/
 ├── run.py                  # Entry Point script
 ├── CODE_DOCUMENTATION.md   # Technical deep-dive
 ├── API_DOCUMENTATION.md    # REST API Endpoint details
+├── SECURITY.md             # Security audit & standards report
 ├── DESIGN_PHILOSOPHY.md     # Why it was built this way
 ├── CONTRIBUTING.md         # How to help
 └── LICENSE                 # GNU GPL v3

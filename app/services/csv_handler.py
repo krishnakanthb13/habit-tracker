@@ -110,21 +110,24 @@ def import_csv(db, file_content, table_name):
     for i, row in enumerate(reader, 1):
         try:
             if table_name == "habits":
+                name = row["name"].strip()[:100]
+                desc = row.get("description", "").strip()[:500]
+                color = row.get("color", "#4CAF50").strip()[:20]
                 db.execute(
                     "INSERT OR REPLACE INTO habits (id, name, description, color, position, created_at, archived) "
                     "VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (row.get("id"), row["name"], row.get("description", ""),
-                     row.get("color", "#4CAF50"), row.get("position", 0),
+                    (row.get("id"), name, desc,
+                     color, row.get("position", 0),
                      row.get("created_at", datetime.now().isoformat()),
                      row.get("archived", 0)),
                 )
             elif table_name == "entries":
                 _validate_entry(row)
+                note = row.get("note", "").strip()[:1000]
                 db.execute(
                     "INSERT OR REPLACE INTO entries (habit_id, entry_date, status, note) "
                     "VALUES (?, ?, ?, ?)",
-                    (row["habit_id"], row["entry_date"], row["status"],
-                     row.get("note", "")),
+                    (row["habit_id"], row["entry_date"], row["status"], note),
                 )
             elif table_name == "goals":
                 db.execute(
@@ -136,7 +139,7 @@ def import_csv(db, file_content, table_name):
             elif table_name == "settings":
                 db.execute(
                     "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)",
-                    (row["key"], row["value"]),
+                    (row["key"].strip()[:50], row["value"].strip()[:200]),
                 )
             imported += 1
         except Exception as e:

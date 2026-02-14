@@ -37,6 +37,14 @@ def create_app(config_class=Config):
     app.register_blueprint(health_bp, url_prefix="/api")
     app.register_blueprint(goals_bp, url_prefix="/api")
     app.register_blueprint(pages_bp)
+    
+    # Security Headers
+    @app.after_request
+    def set_security_headers(response):
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        return response
 
     # Teardown: close DB connection
     @app.teardown_appcontext

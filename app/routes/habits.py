@@ -68,8 +68,18 @@ def create_habit():
     db = get_db()
     data = request.get_json()
 
-    if not data or not data.get("name"):
+    # Trimming and Sanitization
+    name = data.get("name", "").strip()
+    description = data.get("description", "").strip()
+    color = data.get("color", "#4CAF50").strip()
+
+    if not name:
         return jsonify({"error": "Name is required"}), 400
+
+    # Limit lengths to prevent overflow/abuse
+    name = name[:100]
+    description = description[:500]
+    color = color[:20]
 
     # Get max position
     row = db.execute("SELECT MAX(position) as max_pos FROM habits").fetchone()
@@ -77,8 +87,7 @@ def create_habit():
 
     cursor = db.execute(
         "INSERT INTO habits (name, description, color, position) VALUES (?, ?, ?, ?)",
-        (data["name"], data.get("description", ""),
-         data.get("color", "#4CAF50"), next_pos),
+        (name, description, color, next_pos),
     )
     db.commit()
 
@@ -103,15 +112,15 @@ def update_habit(habit_id):
     if not habit:
         return jsonify({"error": "Habit not found"}), 404
 
+    # Trimming and Sanitization
+    name = data.get("name", habit["name"]).strip()[:100]
+    description = data.get("description", habit["description"]).strip()[:500]
+    color = data.get("color", habit["color"]).strip()[:20]
+    position = data.get("position", habit["position"])
+
     db.execute(
         "UPDATE habits SET name = ?, description = ?, color = ?, position = ? WHERE id = ?",
-        (
-            data.get("name", habit["name"]),
-            data.get("description", habit["description"]),
-            data.get("color", habit["color"]),
-            data.get("position", habit["position"]),
-            habit_id,
-        ),
+        (name, description, color, position, habit_id),
     )
     db.commit()
 

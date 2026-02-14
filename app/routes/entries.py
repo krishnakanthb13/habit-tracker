@@ -113,13 +113,15 @@ def update_note(entry_id):
     if not entry:
         return jsonify({"error": "Entry not found"}), 404
 
+    note = data.get("note", "").strip()[:1000]
+
     db.execute(
         "UPDATE entries SET note = ? WHERE id = ?",
-        (data.get("note", ""), entry_id),
+        (note, entry_id),
     )
     db.commit()
 
-    return jsonify({"id": entry_id, "note": data.get("note", "")})
+    return jsonify({"id": entry_id, "note": note})
 
 
 @entries_bp.route("/entries/note", methods=["PUT"])
@@ -130,12 +132,7 @@ def update_note_by_habit_date():
     habit_id = data.get("habit_id")
     settings = _get_settings_dict(db)
     entry_date = data.get("date") or get_effective_today(settings)
-    note = data.get("note", "")
-
-    existing = db.execute(
-        "SELECT * FROM entries WHERE habit_id = ? AND entry_date = ?",
-        (habit_id, entry_date),
-    ).fetchone()
+    note = data.get("note", "").strip()[:1000]
 
     if existing:
         db.execute(
