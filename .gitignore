@@ -1,0 +1,53 @@
+# ============================================
+# Habit Tracker — .gitignore
+# ============================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Database & backups (personal data)
+database/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Logs
+*.log
+logs/
+work_log/
+
+# OS files
+desktop.ini
+.DS_Store
+
+# Env files
+.env
+.env.local
+
+# Agent / system files
+.gemini/
+.agent/
