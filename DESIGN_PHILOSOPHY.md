@@ -16,7 +16,8 @@ The Habit Tracker was built to be **truly yours**. It is a local-first web appli
 - **Local-First & Privacy**: Data never leaves your machine. SQLite is used for high-performance, single-user storage.
 - **Zero-Lag UX (Optimistic UI)**: We prioritize perceived performance. By updating the UI immediately and syncing in the background, we remove the friction of waiting for database writes, making the app feel like a native desktop tool.
 - **Squirky Aesthetic**: A "modern organic" look utilizing super-ellipses (squircles), gentle glassmorphism, and a refined color palette that scales across 5 premium themes.
-- **Data-Positive Deletion (Hide vs. Delete)**: We encourage "Hiding" habits rather than deleting them. This preserves historical data and streaks while keeping the current view clean, reflecting the belief that past progress is valuable even if it's no longer a current priority.
+- **Tactile Inputs**: We replace standard browser inputs (dropdowns, number spinners) with custom, touch-friendly segment buttons and controls that feel physical and responsive. 
+- **Data-Positive Deletion (Hide vs. Delete)**: We encourage "Hiding" habits rather than deleting them. This preserves historical data and streaks while keeping the current view clean.
 - **Zero Configuration**: Single-click launch via `.bat` or `.sh` files. No database setup required.
 - **Transparency**: Streak calculations include "Skip" days as transparent (they don't count for/against the streak), respecting the reality of human life.
 - **Self-Healing**: Built-in database integrity checks and repair tools ensure data longevity. We prioritize **Safe Self-Healing**, meaning corrupted databases are moved to a `.corrupt` extension rather than deleted.

@@ -89,28 +89,42 @@
                 </div>
                 <div class="form-group goal-section">
                     <label>Goal</label>
-                    <select id="habit-goal-type">
-                        <option value="">No goal</option>
-                        <option value="daily">Daily</option>
-                        <option value="weekly">X times per week</option>
-                        <option value="custom">Custom period</option>
-                    </select>
+                    <div class="goal-buttons" id="goal-selector">
+                        <button type="button" class="goal-btn active" data-value="">None</button>
+                        <button type="button" class="goal-btn" data-value="daily">Daily</button>
+                        <button type="button" class="goal-btn" data-value="weekly">Weekly</button>
+                        <button type="button" class="goal-btn" data-value="custom">Custom</button>
+                    </div>
+                    <input type="hidden" id="habit-goal-type" value="">
                     <div id="goal-dynamic-fields" class="goal-dynamic-fields">
                         <div id="goal-target-row" class="form-row" style="display:none;">
-                            <input type="number" id="habit-goal-target" min="1" max="31" value="3" placeholder="Target">
+                            <div class="number-control">
+                                <button type="button" class="btn-spinner"
+                                    onclick="this.nextElementSibling.stepDown()">-</button>
+                                <input type="number" id="habit-goal-target" min="1" max="31" value="3"
+                                    placeholder="Target">
+                                <button type="button" class="btn-spinner"
+                                    onclick="this.previousElementSibling.stepUp()">+</button>
+                            </div>
                             <span id="goal-target-label">times per week</span>
                         </div>
                         <div id="goal-period-row" class="form-row" style="display:none;">
                             <label for="habit-goal-period">Every</label>
-                            <input type="number" id="habit-goal-period" min="1" max="90" value="7">
+                            <div class="number-control">
+                                <button type="button" class="btn-spinner"
+                                    onclick="this.nextElementSibling.stepDown()">-</button>
+                                <input type="number" id="habit-goal-period" min="1" max="90" value="7">
+                                <button type="button" class="btn-spinner"
+                                    onclick="this.previousElementSibling.stepUp()">+</button>
+                            </div>
                             <span>days</span>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-sm" id="btn-delete-habit" hidden
+                    <button type="button" class="btn btn-danger" id="btn-delete-habit" hidden
                         title="Permanently delete this habit and all its records">Delete</button>
-                    <button type="button" class="btn btn-secondary btn-sm" id="btn-archive-habit" hidden
+                    <button type="button" class="btn btn-secondary" id="btn-archive-habit" hidden
                         title="Hide this habit from the calendar">Hide Habit</button>
                     <div class="spacer"></div>
                     <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>

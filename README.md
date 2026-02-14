@@ -14,13 +14,14 @@ A **local-first, cross-platform Habit Tracker Web Application** designed for ult
 
 | Feature | Description |
 |---------|-------------|
-| **Zero-Lag UX** | **Optimistic UI updates** for instant feedback on status toggles and note saving |
-| **Three-State Tracking** | ✔️ Done · ➖ Skipped · ❌ Missed — cycle through by clicking |
-| **Habit reordering** | **Drag & Drop** habit rows to organize your priorities instantly |
-| **Monthly Calendar** | Visual table grid with **sticky headers & columns** for seamless scrolling |
-| **Archiving (Hide)** | Clean up your view by **Hiding** old habits while keeping all their historical data |
-| **Squirky UI** | Modern, organic rounded aesthetic with optimized **Glassmorphism** for speed |
-| **Streak Analytics** | Current streak 🔥, best streak ⭐, total completions per habit |
+|**Zero-Lag UX**|**Optimistic UI updates** for instant feedback on status toggles and note saving|
+|**Three-State Tracking**|✔️ Done · ➖ Skipped · ❌ Missed — cycle through by clicking|
+|**Habit reordering**|**Drag & Drop** habit rows to organize your priorities instantly|
+|**Monthly Calendar**|Visual table grid with **sticky headers & columns** for seamless scrolling|
+|**Archiving (Hide)**|Clean up your view by **Hiding** old habits while keeping all their historical data|
+|**Squirky UI**|Modern, organic rounded aesthetic with optimized **Glassmorphism** for speed|
+|**Tactile Controls**|Custom number spinners and segmented buttons replace native browser inputs|
+|**Streak Analytics**|Current streak 🔥, best streak ⭐, total completions per habit|
 | **Goal Setting** | Daily, weekly (X times/week), or custom period goals |
 | **5 Themes** | Light, Dark, Pure Dark (OLED), Ocean, Sunset — all with high visibility |
 | **Day Extension** | Extend "today" past midnight (configurable up to 6 AM) for night owls |
@@ -59,7 +60,7 @@ chmod +x launch.sh
 
 - **Backend**: Python 3.10+ / Flask (Thin wrapper around business logic)
 - **Database**: SQLite 3 (WAL mode for concurrency and reliability)
-- **Frontend**: Vanilla JS (ES6) + CSS Grid/Variables (Zero JS framework dependencies)
+- **Frontend**: Vanilla JS (ES6) + CSS Variables + Custom Tactile Controls (Zero JS framework dependencies)
 - **Templating**: Jinja2 (Serverside rendering for initial load speed)
 
 **No cloud accounts. No subscriptions. Works fully offline.**

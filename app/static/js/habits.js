@@ -28,9 +28,16 @@ const HabitModal = {
         // Archive button (Hide)
         document.getElementById('btn-archive-habit').addEventListener('click', () => this.archive());
 
-        // Goal type change — drives animated show/hide
-        document.getElementById('habit-goal-type').addEventListener('change', (e) => {
-            this._updateGoalFields(e.target.value);
+        // Goal buttons selector logic
+        const goalButtons = document.querySelectorAll('.goal-btn');
+        const goalInput = document.getElementById('habit-goal-type');
+        goalButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const val = btn.dataset.value || '';
+                goalInput.value = val;
+                this._updateGoalButtons(val);
+                this._updateGoalFields(val);
+            });
         });
 
         // Note: btn-add-habit is inside the calendar table, bound dynamically via onclick
@@ -43,6 +50,7 @@ const HabitModal = {
         document.getElementById('habit-color').value = '#4CAF50';
         document.getElementById('btn-delete-habit').hidden = true;
         document.getElementById('btn-archive-habit').hidden = true;
+        this._updateGoalButtons('');
         this._updateGoalFields('');
         this.modal.hidden = false;
         document.getElementById('habit-name').focus();
@@ -63,6 +71,7 @@ const HabitModal = {
         // Load goal
         if (habit.goal) {
             document.getElementById('habit-goal-type').value = habit.goal.goal_type;
+            this._updateGoalButtons(habit.goal.goal_type);
             this._updateGoalFields(habit.goal.goal_type);
             document.getElementById('habit-goal-target').value = habit.goal.target;
             if (habit.goal.period_days) {
@@ -70,6 +79,7 @@ const HabitModal = {
             }
         } else {
             document.getElementById('habit-goal-type').value = '';
+            this._updateGoalButtons('');
             this._updateGoalFields('');
         }
 
@@ -159,6 +169,12 @@ const HabitModal = {
     async _getLatestHabitId() {
         const habits = await API.get('/api/habits');
         return habits[habits.length - 1]?.id;
+    },
+
+    _updateGoalButtons(value) {
+        document.querySelectorAll('.goal-btn').forEach(btn => {
+            btn.classList.toggle('active', (btn.dataset.value || '') === value);
+        });
     },
 
     /**
