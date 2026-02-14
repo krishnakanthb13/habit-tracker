@@ -1,6 +1,6 @@
 # Habit Tracker - Code Documentation
 
-This document provides a technical overview of the Habit Tracker codebase, its architecture, and data flow.
+This document provides a technical overview of the Habit Tracker codebase, its architecture, and data flow. For a detailed list of available API endpoints, see [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
 
 ## 1. File & Folder Structure
 

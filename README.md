@@ -74,6 +74,7 @@ habit-tracker/
 ├── requirements.txt        # Flask and dependencies
 ├── run.py                  # Entry Point script
 ├── CODE_DOCUMENTATION.md   # Technical deep-dive
+├── API_DOCUMENTATION.md    # REST API Endpoint details
 ├── DESIGN_PHILOSOPHY.md     # Why it was built this way
 ├── CONTRIBUTING.md         # How to help
 └── LICENSE                 # GNU GPL v3
