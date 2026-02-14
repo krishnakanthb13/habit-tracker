@@ -212,21 +212,58 @@ h4,
 
 /* ---- MAIN CONTENT ---- */
 .main-content {
-    padding: 1rem 2rem;
-    max-width: 1300px;
-    margin: 0 auto;
+    padding: 0.75rem 1.25rem;
+    max-width: 100%;
+    margin: 0;
+}
+
+/* Container to handle the fade effect indicators on the sides */
+.calendar-fade-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+}
+
+.calendar-fade-container::before,
+.calendar-fade-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.calendar-fade-container::before {
+    left: 0;
+    background: linear-gradient(to right, var(--surface-card), transparent);
+}
+
+.calendar-fade-container::after {
+    right: 0;
+    background: linear-gradient(to left, var(--surface-card), transparent);
 }
 
 /* ---- TABLE-BASED CALENDAR ---- */
 .calendar-table-wrapper {
-    overflow: auto;
-    max-height: calc(100vh - 160px);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+    overflow-x: auto;
+    overflow-y: hidden;
     background: var(--surface-card);
-    box-shadow: var(--shadow-lg);
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) transparent;
+    white-space: nowrap;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+}
+
+.calendar-table-wrapper::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Edge */
 }
 
 .calendar-table {
@@ -803,14 +840,19 @@ h4,
 
 /* ---- EMPTY STATE ---- */
 .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 3rem 1.5rem;
+    padding: 4rem 2rem;
     color: var(--text-muted);
+    min-height: 300px;
 }
 
 .empty-state .emoji {
-    font-size: 2.5rem;
-    margin-bottom: 0.75rem;
+    font-size: 3rem;
+    margin-bottom: 1rem;
 }
 
 .empty-state h3 {
@@ -910,7 +952,7 @@ h4,
     }
 
     .main-content {
-        padding: 0.5rem;
+        padding: 0.25rem;
         max-width: 100%;
     }
 
