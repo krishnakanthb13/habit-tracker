@@ -8,6 +8,11 @@ A **local-first, cross-platform Habit Tracker Web Application** designed for ult
 
 > *"The discipline of streaks, without the prison of the cloud."*
 
+![Habit Tracker 1](assets/ht1.png)
+![Habit Tracker 2](assets/ht2.png)
+![Habit Tracker 3](assets/ht3.png)
+![Habit Tracker 4](assets/ht4.png)
+
 ---
 
 ## ✨ Features
@@ -22,8 +27,8 @@ A **local-first, cross-platform Habit Tracker Web Application** designed for ult
 |**Squirky UI**|Modern, organic rounded aesthetic with optimized **Glassmorphism** for speed|
 |**Tactile Controls**|Custom number spinners and segmented buttons replace native browser inputs|
 |**Streak Analytics**|Current streak 🔥, best streak ⭐, total completions per habit|
-| **🎯 Goal & Period Tracking** | Set daily, weekly, or custom frequency goals |
-| **📊 Interactive Analytics** | Modern dashboard with activity trends, habit consistency charts, and detailed performance metrics |
+| **Goal Period Tracking** | Set daily, weekly, or custom frequency goals |
+| **Interactive Analytics** | Modern dashboard with activity trends, habit consistency charts, and detailed performance metrics |
 | **5 Themes** | Light, Dark, Pure Dark (OLED), Ocean, Sunset |
 | **🌙 Day Extension** | Late-night tracker? Extend your day boundary past midnight. (configurable up to 6 AM) |
 | **Skip Status** | Enable/disable skipped-day status (marked as `➖`, doesn't break streaks) |
