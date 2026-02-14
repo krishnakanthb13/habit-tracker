@@ -8,27 +8,34 @@
         content="A local-first, cross-platform habit tracker with streaks, goals, and full data ownership.">
     <title>Habit Tracker</title>
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
     <!-- Top Navigation Bar -->
     <header class="navbar">
         <div class="navbar-brand">
-            <span class="navbar-icon">🎯</span>
+            <span class="navbar-icon"><i data-lucide="target"></i></span>
             <h1>Habit Tracker</h1>
         </div>
         <div class="navbar-center">
-            <button id="btn-prev-month" class="btn btn-icon" title="Previous Month">◀</button>
+            <button id="btn-prev-month" class="btn btn-icon" title="Previous Month"><i
+                    data-lucide="chevron-left"></i></button>
             <span id="current-month-label" class="month-label">February, 2026</span>
-            <button id="btn-next-month" class="btn btn-icon" title="Next Month">▶</button>
+            <button id="btn-next-month" class="btn btn-icon" title="Next Month"><i
+                    data-lucide="chevron-right"></i></button>
         </div>
         <div class="navbar-right">
-            <button id="btn-settings" class="btn btn-icon" title="Settings">⚙️</button>
-            <button id="btn-help" class="btn btn-icon" title="Help">❓</button>
+            <button id="btn-settings" class="btn btn-icon" title="Settings"><i data-lucide="settings"></i></button>
+            <button id="btn-help" class="btn btn-icon" title="Help"><i data-lucide="help-circle"></i></button>
         </div>
     </header>
 
@@ -43,6 +50,11 @@
             </div>
         </div>
     </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="fab-add-habit" onclick="HabitModal.open()" title="Add Habit">
+        <i data-lucide="plus"></i>
+    </button>
 
     <!-- Add/Edit Habit Modal -->
     <div id="modal-habit" class="modal" hidden>
@@ -129,7 +141,7 @@
         <div class="panel-body">
             <!-- Theme -->
             <div class="setting-group">
-                <h3>🎨 Theme</h3>
+                <h3><i data-lucide="palette"></i> Theme</h3>
                 <div class="theme-grid" id="theme-selector">
                     <button class="theme-btn" data-theme="light" title="Light">
                         <span class="theme-preview light"></span>Light
@@ -151,7 +163,7 @@
 
             <!-- Day Extension -->
             <div class="setting-group">
-                <h3>🌙 Day Extension</h3>
+                <h3><i data-lucide="moon"></i> Day Extension</h3>
                 <p class="setting-desc">Extend the day boundary past midnight. Useful if you stay up late.</p>
                 <label class="toggle-switch">
                     <input type="checkbox" id="toggle-day-extension">
@@ -167,7 +179,7 @@
 
             <!-- Skip Toggle -->
             <div class="setting-group">
-                <h3>➖ Skip Days</h3>
+                <h3><i data-lucide="minus-square"></i> Skip Days</h3>
                 <p class="setting-desc">Allow marking days as "skipped" (they won't break your streak).</p>
                 <label class="toggle-switch">
                     <input type="checkbox" id="toggle-skip" checked>
@@ -178,7 +190,7 @@
 
             <!-- Animations -->
             <div class="setting-group">
-                <h3>🎉 Animations</h3>
+                <h3><i data-lucide="zap"></i> Animations</h3>
                 <p class="setting-desc">Show celebration effects when you complete a habit.</p>
                 <label class="toggle-switch">
                     <input type="checkbox" id="toggle-animations" checked>
@@ -191,7 +203,7 @@
 
             <!-- Data Management -->
             <div class="setting-group">
-                <h3>💾 Data</h3>
+                <h3><i data-lucide="database"></i> Data</h3>
                 <div class="btn-group-vertical">
                     <button class="btn btn-secondary" id="btn-export">📤 Export All Data (CSV)</button>
                     <label class="btn btn-secondary file-upload-btn">
@@ -203,7 +215,7 @@
 
             <!-- Database Health -->
             <div class="setting-group">
-                <h3>🔧 Database</h3>
+                <h3><i data-lucide="wrench"></i> Database</h3>
                 <div class="btn-group-vertical">
                     <button class="btn btn-secondary" id="btn-health-check">🩺 Integrity Check</button>
                     <button class="btn btn-secondary" id="btn-backup">💾 Create Backup</button>

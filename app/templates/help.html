@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Help — Habit Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
-    <header class="navbar">
+    <header class="navbar navbar-large">
         <div class="navbar-brand">
-            <a href="/" class="back-link">← Back</a>
-            <span class="navbar-icon">❓</span>
+            <a href="/" class="btn btn-secondary btn-icon" title="Back to Home"><i data-lucide="arrow-left"></i></a>
+            <span class="navbar-icon"><i data-lucide="help-circle"></i></span>
             <h1>Help & Documentation</h1>
         </div>
     </header>
 
-    <main class="help-content">
+    <main class="help-content grid-layout">
         <section class="help-section">
-            <h2>🎯 Habit Tracking</h2>
-            <p><strong>What:</strong> Track daily habits with three states — ✔️ Done, ➖ Skipped, ❌ Missed.</p>
-            <p><strong>Why:</strong> Consistent tracking builds self-awareness. Seeing your streaks grow is powerful motivation.</p>
-            <p><strong>How:</strong> Click any cell in the calendar to cycle through states. Click the habit name to edit it.</p>
+            <h2><i data-lucide="target"></i> Habit Tracking</h2>
+            <p><strong>What:</strong> Track daily habits with three states — <span
+                    class="status-badge status-done">Done</span>, <span class="status-badge status-skip">Skipped</span>,
+                <span class="status-badge status-miss">Missed</span>.</p>
+            <p><strong>Why:</strong> Consistent tracking builds self-awareness. Seeing your streaks grow is powerful
+                motivation.</p>
+            <p><strong>How:</strong> Click any cell in the calendar to cycle through states. Click the habit name to
+                edit it.</p>
             <div class="help-tip">
                 <strong>💡 Tip:</strong> Right-click (or long-press) a cell to add a note for that day.
             </div>
         </section>
 
         <section class="help-section">
-            <h2>🔥 Streaks</h2>
+            <h2><i data-lucide="flame"></i> Streaks</h2>
             <p><strong>What:</strong> Consecutive days of completing a habit.</p>
-            <p><strong>Why:</strong> Streaks create momentum. Research shows that longer streaks become harder to break.</p>
+            <p><strong>Why:</strong> Streaks create momentum. Research shows that longer streaks become harder to break.
+            </p>
             <p><strong>Rules:</strong></p>
             <ul>
                 <li>✔️ <strong>Done</strong> entries increment your streak.</li>
@@ -39,12 +51,13 @@
                 <li>➖ <strong>Skipped</strong> days are transparent — they neither break nor extend your streak.</li>
             </ul>
             <div class="help-tip">
-                <strong>💡 Edge case:</strong> If you disable the "Skip" toggle, skipped entries are hidden and treated as missed.
+                <strong>💡 Edge case:</strong> If you disable the "Skip" toggle, skipped entries are hidden and treated
+                as missed.
             </div>
         </section>
 
         <section class="help-section">
-            <h2>🎯 Goals</h2>
+            <h2><i data-lucide="award"></i> Goals</h2>
             <p><strong>What:</strong> Set targets for each habit — daily, weekly, or custom periods.</p>
             <p><strong>Types:</strong></p>
             <ul>
@@ -56,17 +69,19 @@
         </section>
 
         <section class="help-section">
-            <h2>🌙 Day Extension</h2>
+            <h2><i data-lucide="moon"></i> Day Extension</h2>
             <p><strong>What:</strong> Extends "today" past midnight, up to 6 AM.</p>
-            <p><strong>Why:</strong> If you stay up past midnight, you probably still think of it as "today." This setting respects that.</p>
-            <p><strong>Example:</strong> With extension set to 3 AM, marking a habit at 2:30 AM counts for the previous calendar day.</p>
+            <p><strong>Why:</strong> If you stay up past midnight, you probably still think of it as "today." This
+                setting respects that.</p>
+            <p><strong>Example:</strong> With extension set to 3 AM, marking a habit at 2:30 AM counts for the previous
+                calendar day.</p>
             <div class="help-tip">
                 <strong>⚠️ Note:</strong> This affects streak calculations too — consistently applied.
             </div>
         </section>
 
         <section class="help-section">
-            <h2>🎨 Themes</h2>
+            <h2><i data-lucide="palette"></i> Themes</h2>
             <p><strong>Available themes:</strong></p>
             <ul>
                 <li><strong>Light:</strong> Clean and bright, best for daytime use.</li>
@@ -79,18 +94,21 @@
         </section>
 
         <section class="help-section">
-            <h2>💾 Data Management</h2>
-            <p><strong>Export:</strong> Downloads a ZIP file containing CSV files for all your data (habits, entries, goals, settings).</p>
+            <h2><i data-lucide="database"></i> Data Management</h2>
+            <p><strong>Export:</strong> Downloads a ZIP file containing CSV files for all your data (habits, entries,
+                goals, settings).</p>
             <p><strong>Import:</strong> Upload a CSV file to restore data. You'll see a preview before confirming.</p>
             <div class="help-tip">
-                <strong>💡 Tip:</strong> Regular exports protect against data loss. The app also auto-backs up before any repairs.
+                <strong>💡 Tip:</strong> Regular exports protect against data loss. The app also auto-backs up before
+                any repairs.
             </div>
         </section>
 
         <section class="help-section">
-            <h2>🔧 Database Repair</h2>
+            <h2><i data-lucide="wrench"></i> Database Repair</h2>
             <p><strong>What:</strong> Self-healing mechanism for corrupted databases.</p>
-            <p><strong>When to use:</strong> If the app behaves unexpectedly (missing data, errors), run an integrity check first.</p>
+            <p><strong>When to use:</strong> If the app behaves unexpectedly (missing data, errors), run an integrity
+                check first.</p>
             <p><strong>Process:</strong></p>
             <ol>
                 <li>Creates a timestamped backup.</li>
@@ -108,6 +126,10 @@
     <script>
         // Apply saved theme
         ThemeManager.init();
+        if (window.lucide) {
+            lucide.createIcons();
+        }
     </script>
 </body>
+
 </html>

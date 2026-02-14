@@ -30,6 +30,9 @@ const App = {
         HabitModal.init();
         NoteModal.init();
         Settings.init();
+        if (window.lucide) {
+            lucide.createIcons();
+        }
 
         // Load settings first (applies theme, toggles)
         await Settings.loadSettings();

@@ -102,16 +102,13 @@ const Calendar = {
             html += this._renderHabitRow(habit, days, data);
         }
 
-        // ---- Footer: + New Habit button ----
-        html += `<tr class="add-habit-row">`;
-        html += `<td colspan="${days + 3}">`;
-        html += `<button class="btn-text" id="btn-add-habit" onclick="HabitModal.open()">+ New Habit</button>`;
-        html += `</td></tr>`;
-
         html += '</tbody></table>';
 
         container.innerHTML = html;
         this._bindCellEvents();
+        if (window.lucide) {
+            lucide.createIcons();
+        }
     },
 
     _renderHabitRow(habit, days, data) {
