@@ -14,14 +14,18 @@ A **local-first, cross-platform Habit Tracker Web Application** designed for ult
 
 | Feature | Description |
 |---------|-------------|
+| **Zero-Lag UX** | **Optimistic UI updates** for instant feedback on status toggles and note saving |
 | **Three-State Tracking** | ✔️ Done · ➖ Skipped · ❌ Missed — cycle through by clicking |
+| **Habit reordering** | **Drag & Drop** habit rows to organize your priorities instantly |
 | **Monthly Calendar** | Visual table grid with **sticky headers & columns** for seamless scrolling |
+| **Archiving (Hide)** | Clean up your view by **Hiding** old habits while keeping all their historical data |
+| **Squirky UI** | Modern, organic rounded aesthetic with optimized **Glassmorphism** for speed |
 | **Streak Analytics** | Current streak 🔥, best streak ⭐, total completions per habit |
 | **Goal Setting** | Daily, weekly (X times/week), or custom period goals |
 | **5 Themes** | Light, Dark, Pure Dark (OLED), Ocean, Sunset — all with high visibility |
 | **Day Extension** | Extend "today" past midnight (configurable up to 6 AM) for night owls |
 | **Skip Status** | Enable/disable skipped-day status (marked as `➖`, doesn't break streaks) |
-| **Notes** | Right-click any calendar cell to add or **clear** detailed notes/logs |
+| **Notes** | Right-click any calendar cell to add/clear notes with **background sync** |
 | **Party Popper** | 🎉 Confetti physics celebration on habit completion (toggleable) |
 | **Import/Export** | Full CSV export (ZIP) and import with preview for easy backups |
 | **Self-Healing DB** | Integrity checks, robust auto-backups, and repair with `.corrupt` safety |
