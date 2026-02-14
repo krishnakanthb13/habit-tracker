@@ -173,6 +173,7 @@ const Calendar = {
         if (window.lucide) {
             lucide.createIcons();
         }
+        this._initSortable();
     },
 
     _renderHabitRow(habit, days, data) {
@@ -183,7 +184,7 @@ const Calendar = {
         const goalCurrent = goal ? goal.current : totalDone;
         const goalMet = goal && goal.met;
 
-        let html = '<tr>';
+        let html = `<tr data-id="${habit.id}">`;
 
         // Habit name cell
         const description = (habitData?.description || 'No description').replace(/"/g, '&quot;');
@@ -305,5 +306,25 @@ const Calendar = {
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    },
+
+    _initSortable() {
+        const el = document.querySelector('.calendar-table tbody');
+        if (!el || !window.Sortable) return;
+
+        Sortable.create(el, {
+            animation: 150,
+            handle: '.habit-name-cell',
+            ghostClass: 'sortable-ghost',
+            dragClass: 'sortable-drag',
+            onEnd: async () => {
+                const order = Array.from(el.querySelectorAll('tr')).map(tr => parseInt(tr.dataset.id));
+                try {
+                    await API.put('/api/habits/reorder', { order });
+                } catch (e) {
+                    Toast.show('Failed to save order: ' + e.message, 'error');
+                }
+            }
+        });
     }
 };

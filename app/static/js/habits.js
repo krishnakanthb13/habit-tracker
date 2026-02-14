@@ -22,8 +22,11 @@ const HabitModal = {
             this.save();
         });
 
-        // Delete button
-        document.getElementById('btn-delete-habit').addEventListener('click', () => this.delete());
+        // Delete button (Hard)
+        document.getElementById('btn-delete-habit').addEventListener('click', () => this.hardDelete());
+
+        // Archive button (Hide)
+        document.getElementById('btn-archive-habit').addEventListener('click', () => this.archive());
 
         // Goal type change — drives animated show/hide
         document.getElementById('habit-goal-type').addEventListener('change', (e) => {
@@ -39,6 +42,7 @@ const HabitModal = {
         document.getElementById('habit-id').value = '';
         document.getElementById('habit-color').value = '#4CAF50';
         document.getElementById('btn-delete-habit').hidden = true;
+        document.getElementById('btn-archive-habit').hidden = true;
         this._updateGoalFields('');
         this.modal.hidden = false;
         document.getElementById('habit-name').focus();
@@ -54,6 +58,7 @@ const HabitModal = {
         document.getElementById('habit-description').value = habit.description || '';
         document.getElementById('habit-color').value = habit.color;
         document.getElementById('btn-delete-habit').hidden = false;
+        document.getElementById('btn-archive-habit').hidden = false;
 
         // Load goal
         if (habit.goal) {
@@ -118,15 +123,32 @@ const HabitModal = {
         }
     },
 
-    async delete() {
+    async archive() {
         const id = document.getElementById('habit-id').value;
         if (!id) return;
 
-        if (!confirm('Are you sure you want to delete this habit? This action cannot be undone.')) return;
+        if (!confirm('Hide this habit from the calendar? You can restore it from settings later.')) return;
 
         try {
-            await API.delete(`/api/habits/${id}`);
-            Toast.show('Habit deleted', 'info');
+            await API.delete(`/api/habits/${id}`); // Our API currently uses DELETE for soft-delete
+            Toast.show('Habit hidden 🙈', 'info');
+            this.close();
+            await App.refresh();
+            await Settings.loadArchivedHabits(); // Refresh the list in settings
+        } catch (e) {
+            Toast.show('Failed to hide: ' + e.message, 'error');
+        }
+    },
+
+    async hardDelete() {
+        const id = document.getElementById('habit-id').value;
+        if (!id) return;
+
+        if (!confirm('⚠️ PERMANENT DELETE\n\nAre you sure? This will delete all history and data for this habit forever.')) return;
+
+        try {
+            await API.delete(`/api/habits/${id}/hard-delete`);
+            Toast.show('Habit permanently deleted', 'error');
             this.close();
             await App.refresh();
         } catch (e) {

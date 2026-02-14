@@ -134,6 +134,11 @@ def update_note_by_habit_date():
     entry_date = data.get("date") or get_effective_today(settings)
     note = data.get("note", "").strip()[:1000]
 
+    existing = db.execute(
+        "SELECT * FROM entries WHERE habit_id = ? AND entry_date = ?",
+        (habit_id, entry_date),
+    ).fetchone()
+
     if existing:
         db.execute(
             "UPDATE entries SET note = ? WHERE id = ?",

@@ -149,6 +149,32 @@ def archive_habit(habit_id):
     return jsonify({"message": "Habit archived", "id": habit_id})
 
 
+@habits_bp.route("/habits/<int:habit_id>/unarchive", methods=["POST"])
+def unarchive_habit(habit_id):
+    """Restore an archived habit."""
+    db = get_db()
+    db.execute("UPDATE habits SET archived = 0 WHERE id = ?", (habit_id,))
+    db.commit()
+    return jsonify({"message": "Habit restored", "id": habit_id})
+
+
+@habits_bp.route("/habits/<int:habit_id>/hard-delete", methods=["DELETE"])
+def hard_delete_habit(habit_id):
+    """Permanently delete a habit and all records."""
+    db = get_db()
+    db.execute("DELETE FROM habits WHERE id = ?", (habit_id,))
+    db.commit()
+    return jsonify({"message": "Habit permanently deleted", "id": habit_id})
+
+
+@habits_bp.route("/habits/archived", methods=["GET"])
+def list_archived_habits():
+    """List all archived habits."""
+    db = get_db()
+    habits = db.execute("SELECT * FROM habits WHERE archived = 1").fetchall()
+    return jsonify([dict(h) for h in habits])
+
+
 @habits_bp.route("/habits/reorder", methods=["PUT"])
 def reorder_habits():
     """Reorder habits by providing a list of IDs in desired order."""

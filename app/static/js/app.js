@@ -71,6 +71,7 @@ const App = {
     async refresh() {
         await this.loadHabits();
         await Calendar.load();
+        await Settings.loadArchivedHabits();
     }
 };
 

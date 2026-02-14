@@ -102,6 +102,9 @@ const Settings = {
             document.getElementById('toggle-animations').checked = animEnabled;
             Animations.init(animEnabled);
 
+            // Load archived habits
+            await this.loadArchivedHabits();
+
         } catch (e) {
             console.warn('Failed to load settings:', e);
         }
@@ -221,6 +224,41 @@ const Settings = {
         } catch (e) {
             resultDiv.className = 'health-result error';
             resultDiv.textContent = '❌ Repair failed: ' + e.message;
+        }
+    },
+
+    async loadArchivedHabits() {
+        const listContainer = document.getElementById('archived-habits-list');
+        try {
+            const habits = await API.get('/api/habits/archived');
+            if (habits.length === 0) {
+                listContainer.innerHTML = '<p class="text-muted" style="font-size: 0.8rem;">No hidden habits.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = habits.map(h => `
+                <div class="archived-item">
+                    <div class="archived-info">
+                        <span class="archived-color" style="background-color: ${h.color}"></span>
+                        <span>${h.name}</span>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="Settings.unarchiveHabit(${h.id})">Unhide</button>
+                </div>
+            `).join('');
+
+        } catch (e) {
+            console.error('Failed to load archived habits:', e);
+        }
+    },
+
+    async unarchiveHabit(id) {
+        try {
+            await API.post(`/api/habits/${id}/unarchive`, {});
+            Toast.show('Habit restored! 👀', 'success');
+            await App.refresh();
+            await this.loadArchivedHabits();
+        } catch (e) {
+            Toast.show('Failed to restore habit: ' + e.message, 'error');
         }
     }
 };
