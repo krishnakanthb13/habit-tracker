@@ -34,7 +34,7 @@
     --scrollbar-bg: #f2f2f7;
     --scrollbar-thumb: #c7c7cc;
     --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-border: rgba(0, 0, 0, 0.1);
     --surface-card: #ffffff;
 }
 

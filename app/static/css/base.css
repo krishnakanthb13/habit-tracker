@@ -169,13 +169,13 @@ h4,
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-elevated);
     color: var(--text-primary);
     border: 1px solid var(--glass-border);
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-hover);
     border-color: var(--accent);
 }
 
@@ -683,7 +683,7 @@ h4,
 
 /* Premium Note Textarea */
 #note-text {
-    min-height: 240px;
+    min-height: 30vh;
     resize: none;
     line-height: 1.6;
     background: rgba(0, 0, 0, 0.25);

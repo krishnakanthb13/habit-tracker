@@ -7,6 +7,7 @@ const Calendar = {
     currentYear: new Date().getFullYear(),
     currentMonth: new Date().getMonth() + 1,
     data: null,
+    sortable: null,
 
     init() {
         document.getElementById('btn-prev-month').addEventListener('click', () => this.navigate(-1));
@@ -312,7 +313,13 @@ const Calendar = {
         const el = document.querySelector('.calendar-table tbody');
         if (!el || !window.Sortable) return;
 
-        Sortable.create(el, {
+        // Clean up old instance if exists
+        if (this.sortable) {
+            this.sortable.destroy();
+            this.sortable = null;
+        }
+
+        this.sortable = Sortable.create(el, {
             animation: 150,
             handle: '.habit-name-cell',
             ghostClass: 'sortable-ghost',
