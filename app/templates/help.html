@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help — Habit Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">
+            <a href="/" class="back-link">← Back</a>
+            <span class="navbar-icon">❓</span>
+            <h1>Help & Documentation</h1>
+        </div>
+    </header>
+
+    <main class="help-content">
+        <section class="help-section">
+            <h2>🎯 Habit Tracking</h2>
+            <p><strong>What:</strong> Track daily habits with three states — ✔️ Done, ➖ Skipped, ❌ Missed.</p>
+            <p><strong>Why:</strong> Consistent tracking builds self-awareness. Seeing your streaks grow is powerful motivation.</p>
+            <p><strong>How:</strong> Click any cell in the calendar to cycle through states. Click the habit name to edit it.</p>
+            <div class="help-tip">
+                <strong>💡 Tip:</strong> Right-click (or long-press) a cell to add a note for that day.
+            </div>
+        </section>
+
+        <section class="help-section">
+            <h2>🔥 Streaks</h2>
+            <p><strong>What:</strong> Consecutive days of completing a habit.</p>
+            <p><strong>Why:</strong> Streaks create momentum. Research shows that longer streaks become harder to break.</p>
+            <p><strong>Rules:</strong></p>
+            <ul>
+                <li>✔️ <strong>Done</strong> entries increment your streak.</li>
+                <li>❌ <strong>Missed</strong> entries (or empty days) break your streak.</li>
+                <li>➖ <strong>Skipped</strong> days are transparent — they neither break nor extend your streak.</li>
+            </ul>
+            <div class="help-tip">
+                <strong>💡 Edge case:</strong> If you disable the "Skip" toggle, skipped entries are hidden and treated as missed.
+            </div>
+        </section>
+
+        <section class="help-section">
+            <h2>🎯 Goals</h2>
+            <p><strong>What:</strong> Set targets for each habit — daily, weekly, or custom periods.</p>
+            <p><strong>Types:</strong></p>
+            <ul>
+                <li><strong>Daily:</strong> Complete the habit every day.</li>
+                <li><strong>Weekly:</strong> Complete X times per week (e.g., 3 times/week).</li>
+                <li><strong>Custom:</strong> Complete X times every N days.</li>
+            </ul>
+            <p><strong>When to use:</strong> Not every habit needs to be daily. Use weekly goals for flexibility.</p>
+        </section>
+
+        <section class="help-section">
+            <h2>🌙 Day Extension</h2>
+            <p><strong>What:</strong> Extends "today" past midnight, up to 6 AM.</p>
+            <p><strong>Why:</strong> If you stay up past midnight, you probably still think of it as "today." This setting respects that.</p>
+            <p><strong>Example:</strong> With extension set to 3 AM, marking a habit at 2:30 AM counts for the previous calendar day.</p>
+            <div class="help-tip">
+                <strong>⚠️ Note:</strong> This affects streak calculations too — consistently applied.
+            </div>
+        </section>
+
+        <section class="help-section">
+            <h2>🎨 Themes</h2>
+            <p><strong>Available themes:</strong></p>
+            <ul>
+                <li><strong>Light:</strong> Clean and bright, best for daytime use.</li>
+                <li><strong>Dark:</strong> Easy on the eyes, good for evening use.</li>
+                <li><strong>Pure Dark:</strong> True black backgrounds, OLED-optimized to save battery.</li>
+                <li><strong>Ocean:</strong> Cool, calming blue tones.</li>
+                <li><strong>Sunset:</strong> Warm, energetic purple-orange gradient feel.</li>
+            </ul>
+            <p>Your theme choice is saved and persists across sessions.</p>
+        </section>
+
+        <section class="help-section">
+            <h2>💾 Data Management</h2>
+            <p><strong>Export:</strong> Downloads a ZIP file containing CSV files for all your data (habits, entries, goals, settings).</p>
+            <p><strong>Import:</strong> Upload a CSV file to restore data. You'll see a preview before confirming.</p>
+            <div class="help-tip">
+                <strong>💡 Tip:</strong> Regular exports protect against data loss. The app also auto-backs up before any repairs.
+            </div>
+        </section>
+
+        <section class="help-section">
+            <h2>🔧 Database Repair</h2>
+            <p><strong>What:</strong> Self-healing mechanism for corrupted databases.</p>
+            <p><strong>When to use:</strong> If the app behaves unexpectedly (missing data, errors), run an integrity check first.</p>
+            <p><strong>Process:</strong></p>
+            <ol>
+                <li>Creates a timestamped backup.</li>
+                <li>Attempts to export and reimport all data into a fresh database.</li>
+                <li>Verifies foreign key constraints.</li>
+                <li>Reports results.</li>
+            </ol>
+            <div class="help-tip">
+                <strong>⚠️ Caution:</strong> Only use repair if integrity check fails. Backups are always created first.
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/themes.js') }}"></script>
+    <script>
+        // Apply saved theme
+        ThemeManager.init();
+    </script>
+</body>
+</html>

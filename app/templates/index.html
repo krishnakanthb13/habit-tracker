@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="A local-first, cross-platform habit tracker with streaks, goals, and full data ownership.">
+    <title>Habit Tracker</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <div class="navbar-brand">
+            <span class="navbar-icon">🎯</span>
+            <h1>Habit Tracker</h1>
+        </div>
+        <div class="navbar-center">
+            <button id="btn-prev-month" class="btn btn-icon" title="Previous Month">◀</button>
+            <span id="current-month-label" class="month-label">February, 2026</span>
+            <button id="btn-next-month" class="btn btn-icon" title="Next Month">▶</button>
+        </div>
+        <div class="navbar-right">
+            <button id="btn-settings" class="btn btn-icon" title="Settings">⚙️</button>
+            <button id="btn-help" class="btn btn-icon" title="Help">❓</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Calendar Table -->
+        <div id="calendar-container" class="calendar-table-wrapper">
+            <!-- Rendered by JS -->
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading habits...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Habit Modal -->
+    <div id="modal-habit" class="modal" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-habit-title">Add Habit</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="form-habit" class="modal-body">
+                <input type="hidden" id="habit-id">
+                <div class="form-group">
+                    <label for="habit-name">Name</label>
+                    <input type="text" id="habit-name" required placeholder="e.g. Exercise" maxlength="100" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="habit-description">Description</label>
+                    <textarea id="habit-description" placeholder="Optional description..." rows="2"
+                        maxlength="500"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="habit-color">Color</label>
+                    <input type="color" id="habit-color" value="#4CAF50">
+                </div>
+                <div class="form-group goal-section">
+                    <label>Goal</label>
+                    <select id="habit-goal-type">
+                        <option value="">No goal</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">X times per week</option>
+                        <option value="custom">Custom period</option>
+                    </select>
+                    <div id="goal-dynamic-fields" class="goal-dynamic-fields">
+                        <div id="goal-target-row" class="form-row" style="display:none;">
+                            <input type="number" id="habit-goal-target" min="1" max="31" value="3" placeholder="Target">
+                            <span id="goal-target-label">times per week</span>
+                        </div>
+                        <div id="goal-period-row" class="form-row" style="display:none;">
+                            <label for="habit-goal-period">Every</label>
+                            <input type="number" id="habit-goal-period" min="1" max="90" value="7">
+                            <span>days</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="btn-delete-habit" hidden>Delete</button>
+                    <div class="spacer"></div>
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div id="modal-note" class="modal" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Add Note</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="note-text" rows="4" placeholder="Write a note for this day..."
+                    maxlength="1000"></textarea>
+                <input type="hidden" id="note-habit-id">
+                <input type="hidden" id="note-date">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-close-modal>Cancel</button>
+                <button class="btn btn-primary" id="btn-save-note">Save Note</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Panel (Slide-in) -->
+    <aside id="settings-panel" class="side-panel" hidden>
+        <div class="panel-header">
+            <h2>Settings</h2>
+            <button class="modal-close" id="btn-close-settings">&times;</button>
+        </div>
+        <div class="panel-body">
+            <!-- Theme -->
+            <div class="setting-group">
+                <h3>🎨 Theme</h3>
+                <div class="theme-grid" id="theme-selector">
+                    <button class="theme-btn" data-theme="light" title="Light">
+                        <span class="theme-preview light"></span>Light
+                    </button>
+                    <button class="theme-btn" data-theme="dark" title="Dark">
+                        <span class="theme-preview dark"></span>Dark
+                    </button>
+                    <button class="theme-btn" data-theme="pure-dark" title="Pure Dark">
+                        <span class="theme-preview pure-dark"></span>Pure Dark
+                    </button>
+                    <button class="theme-btn" data-theme="ocean" title="Ocean">
+                        <span class="theme-preview ocean"></span>Ocean
+                    </button>
+                    <button class="theme-btn" data-theme="sunset" title="Sunset">
+                        <span class="theme-preview sunset"></span>Sunset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Day Extension -->
+            <div class="setting-group">
+                <h3>🌙 Day Extension</h3>
+                <p class="setting-desc">Extend the day boundary past midnight. Useful if you stay up late.</p>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-day-extension">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Extend day to <strong id="day-ext-hour-display">3</strong> AM</span>
+                </label>
+                <div id="day-ext-hour-control" class="form-row" hidden>
+                    <label for="day-ext-hour">Cutoff hour:</label>
+                    <input type="range" id="day-ext-hour" min="1" max="6" value="3">
+                    <span id="day-ext-hour-value">3</span> AM
+                </div>
+            </div>
+
+            <!-- Skip Toggle -->
+            <div class="setting-group">
+                <h3>➖ Skip Days</h3>
+                <p class="setting-desc">Allow marking days as "skipped" (they won't break your streak).</p>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-skip" checked>
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Enable skip status</span>
+                </label>
+            </div>
+
+            <!-- Animations -->
+            <div class="setting-group">
+                <h3>🎉 Animations</h3>
+                <p class="setting-desc">Show celebration effects when you complete a habit.</p>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-animations" checked>
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Enable animations</span>
+                </label>
+            </div>
+
+            <hr>
+
+            <!-- Data Management -->
+            <div class="setting-group">
+                <h3>💾 Data</h3>
+                <div class="btn-group-vertical">
+                    <button class="btn btn-secondary" id="btn-export">📤 Export All Data (CSV)</button>
+                    <label class="btn btn-secondary file-upload-btn">
+                        📥 Import CSV
+                        <input type="file" id="import-file" accept=".csv,.zip" hidden>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Database Health -->
+            <div class="setting-group">
+                <h3>🔧 Database</h3>
+                <div class="btn-group-vertical">
+                    <button class="btn btn-secondary" id="btn-health-check">🩺 Integrity Check</button>
+                    <button class="btn btn-secondary" id="btn-backup">💾 Create Backup</button>
+                    <button class="btn btn-danger" id="btn-repair">🔨 Repair Database</button>
+                </div>
+                <div id="health-result" class="health-result" hidden></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/themes.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/habits.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>
