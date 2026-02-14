@@ -36,6 +36,8 @@ def create_app(config_class=Config):
     app.register_blueprint(data_bp, url_prefix="/api")
     app.register_blueprint(health_bp, url_prefix="/api")
     app.register_blueprint(goals_bp, url_prefix="/api")
+    from .routes.analytics import analytics_bp
+    app.register_blueprint(analytics_bp, url_prefix="/api")
     app.register_blueprint(pages_bp)
     
     # Security Headers

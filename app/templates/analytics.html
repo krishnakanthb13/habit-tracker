@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Habit Tracker</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .analytics-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header:first-of-type {
+            margin-top: 1rem;
+        }
+
+        h2.section-title {
+            margin: 0;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary);
+        }
+
+        .stat-icon-wrapper {
+            background: var(--bg-main);
+            padding: 1rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-icon-wrapper i {
+            width: 32px;
+            height: 32px;
+            stroke-width: 2.5px;
+        }
+
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3rem;
+        }
+
+        .chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            height: 400px;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-canvas-wrapper {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            width: 100%;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .habit-list {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .habit-item:last-child {
+            border-bottom: none;
+        }
+
+        .habit-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .habit-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .habit-name {
+            font-weight: 500;
+        }
+
+        .habit-metrics {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .metric span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        h2.section-title {
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar navbar-large">
+        <div class="navbar-brand">
+            <a href="/" class="btn btn-secondary btn-icon" title="Back to Tracker"><i data-lucide="arrow-left"></i></a>
+            <span class="navbar-icon"><i data-lucide="bar-chart-2"></i></span>
+            <h1>Analytics</h1>
+        </div>
+    </header>
+
+    <main class="analytics-container">
+        <!-- Stats Overview -->
+        <div class="section-header">
+            <h2 class="section-title">Overview</h2>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">
+                    <i data-lucide="check-circle" style="color: var(--primary);"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="total-completions">-</div>
+                    <div class="stat-label">Completions</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">
+                    <i data-lucide="flame" style="color: #ff9800;"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="best-streak">-</div>
+                    <div class="stat-label">Best Streak</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">
+                    <i data-lucide="layers" style="color: var(--secondary);"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="total-habits">-</div>
+                    <div class="stat-label">Total Habits</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">
+                    <i data-lucide="trending-up" style="color: #4caf50;"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="completion-rate">-</div>
+                    <div class="stat-label">Consistency</div>
+                </div>
+            </div>
+        </div>
+        <hr style="margin-top: 1rem; margin-bottom: 1rem;">
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-title"><i data-lucide="activity"></i> Activity Trend</div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title"><i data-lucide="bar-chart-2"></i> Habit Consistency</div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="consistencyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed List -->
+        <div class="section-header">
+            <h2 class="section-title">Detailed Breakdown</h2>
+        </div>
+        <div class="habit-list" id="habit-breakdown-list">
+            <!-- Populated by JS -->
+            <div class="habit-item" style="justify-content: center; padding: 2rem; color: var(--text-muted);">
+                Loading data...
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/themes.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            ThemeManager.init();
+        });
+    </script>
+</body>
+
+</html>
