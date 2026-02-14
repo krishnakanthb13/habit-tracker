@@ -1,0 +1,242 @@
+/**
+ * Calendar — renders monthly calendar as a <table> with day-of-week headers,
+ * Goal and Achieved columns, and a "+ New Habit" button row.
+ * ALL dates (past, today, future) are editable.
+ */
+const Calendar = {
+    currentYear: new Date().getFullYear(),
+    currentMonth: new Date().getMonth() + 1,
+    data: null,
+
+    init() {
+        document.getElementById('btn-prev-month').addEventListener('click', () => this.navigate(-1));
+        document.getElementById('btn-next-month').addEventListener('click', () => this.navigate(1));
+    },
+
+    navigate(delta) {
+        this.currentMonth += delta;
+        if (this.currentMonth > 12) {
+            this.currentMonth = 1;
+            this.currentYear++;
+        } else if (this.currentMonth < 1) {
+            this.currentMonth = 12;
+            this.currentYear--;
+        }
+        this.load();
+    },
+
+    async load() {
+        const monthStr = `${this.currentYear}-${String(this.currentMonth).padStart(2, '0')}`;
+        document.getElementById('current-month-label').textContent = this._formatMonthLabel();
+
+        try {
+            this.data = await API.get(`/api/calendar?month=${monthStr}`);
+            this.render();
+        } catch (e) {
+            Toast.show('Failed to load calendar: ' + e.message, 'error');
+        }
+    },
+
+    render() {
+        const container = document.getElementById('calendar-container');
+        const data = this.data;
+
+        if (!data || !data.habits || data.habits.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="emoji">🎯</div>
+                    <h3>No habits yet</h3>
+                    <p>Click <strong>+ New Habit</strong> to start tracking your first habit.</p>
+                    <button class="btn btn-primary" onclick="HabitModal.open()">+ Add Your First Habit</button>
+                </div>
+            `;
+            return;
+        }
+
+        const days = data.days_in_month;
+        const today = data.today;
+        const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+        let html = '<table class="calendar-table">';
+
+        // ---- HEADER ROW 1: Day-of-week names ----
+        html += '<thead>';
+        html += '<tr>';
+        html += '<th class="col-habit" rowspan="2">Habits</th>';
+        for (let d = 1; d <= days; d++) {
+            const dayOfWeek = new Date(data.year, data.month - 1, d).getDay();
+            const dateStr = this._dateStr(data, d);
+            const isToday = dateStr === today;
+            const isFri = dayOfWeek === 5;
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            let cls = '';
+            if (isToday) cls = 'day-today';
+            else if (isFri) cls = 'day-fri';
+            else if (isWeekend) cls = 'day-weekend';
+            html += `<th class="${cls}">${dayNames[dayOfWeek]}</th>`;
+        }
+        html += '<th class="col-goal" rowspan="2">Goal</th>';
+        html += '<th class="col-achieved" rowspan="2">Achieved</th>';
+        html += '</tr>';
+
+        // ---- HEADER ROW 2: Day numbers ----
+        html += '<tr>';
+        for (let d = 1; d <= days; d++) {
+            const dateStr = this._dateStr(data, d);
+            const isToday = dateStr === today;
+            const dayOfWeek = new Date(data.year, data.month - 1, d).getDay();
+            const isFri = dayOfWeek === 5;
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            let cls = '';
+            if (isToday) cls = 'day-today';
+            else if (isFri) cls = 'day-fri';
+            else if (isWeekend) cls = 'day-weekend';
+            html += `<th class="${cls}">${d}</th>`;
+        }
+        html += '</tr>';
+        html += '</thead>';
+
+        // ---- BODY: Habit rows ----
+        html += '<tbody>';
+        for (const habit of data.habits) {
+            html += this._renderHabitRow(habit, days, data);
+        }
+
+        // ---- Footer: + New Habit button ----
+        html += `<tr class="add-habit-row">`;
+        html += `<td colspan="${days + 3}">`;
+        html += `<button class="btn-text" id="btn-add-habit" onclick="HabitModal.open()">+ New Habit</button>`;
+        html += `</td></tr>`;
+
+        html += '</tbody></table>';
+
+        container.innerHTML = html;
+        this._bindCellEvents();
+    },
+
+    _renderHabitRow(habit, days, data) {
+        const habitData = App.habitsData?.find(h => h.id === habit.id);
+        const goal = habitData?.goal;
+        const totalDone = habitData?.total_done ?? 0;
+        const goalTarget = goal ? goal.target : '';
+        const goalCurrent = goal ? goal.current : totalDone;
+        const goalMet = goal && goal.met;
+
+        let html = '<tr>';
+
+        // Habit name cell
+        html += `<td class="habit-name-cell" data-habit-id="${habit.id}" onclick="HabitModal.openEdit(${habit.id})" title="${this._escapeHtml(habit.name)}">`;
+        html += this._escapeHtml(habit.name);
+        html += '</td>';
+
+        // Day cells — ALL dates are now editable (no future block)
+        for (let d = 1; d <= days; d++) {
+            const dateStr = this._dateStr(data, d);
+            const entry = habit.entries[dateStr];
+            const status = entry?.status || null;
+            const hasNote = entry?.note ? true : false;
+            const isToday = dateStr === data.today;
+
+            const classes = ['day-cell'];
+            if (status) classes.push(`status-${status}`);
+            if (isToday && !status) classes.push('day-today');
+
+            let symbol = '';
+            if (status === 'done') symbol = '✔';
+            else if (status === 'skip') symbol = '➖';
+            else if (status === 'miss') symbol = '❌';
+
+            const noteDot = hasNote ? '<span class="note-dot"></span>' : '';
+
+            html += `<td class="${classes.join(' ')}"
+                         data-habit-id="${habit.id}"
+                         data-date="${dateStr}"
+                         data-status="${status || ''}"
+                         title="${dateStr}${hasNote ? ' 📝' : ''}"
+                    >${symbol}${noteDot}</td>`;
+        }
+
+        // Goal column
+        html += `<td class="col-goal-val">${goalTarget}</td>`;
+
+        // Achieved column
+        html += `<td class="col-achieved-val ${goalMet ? 'met' : ''}">${goalCurrent}</td>`;
+
+        html += '</tr>';
+        return html;
+    },
+
+    _bindCellEvents() {
+        // ALL day-cells are clickable — no future filter
+        document.querySelectorAll('.calendar-table td.day-cell').forEach(cell => {
+            // Left click — cycle status
+            cell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const habitId = parseInt(cell.dataset.habitId);
+                const date = cell.dataset.date;
+                const currentStatus = cell.dataset.status;
+                this._cycleStatus(habitId, date, currentStatus, cell);
+            });
+
+            // Right click — add note
+            cell.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                const habitId = parseInt(cell.dataset.habitId);
+                const date = cell.dataset.date;
+                NoteModal.open(habitId, date);
+            });
+        });
+    },
+
+    async _cycleStatus(habitId, date, currentStatus, cell) {
+        const skipEnabled = this.data?.skip_enabled !== false;
+
+        let nextStatus;
+        if (!currentStatus || currentStatus === 'undefined' || currentStatus === '') {
+            nextStatus = 'done';
+        } else if (currentStatus === 'done') {
+            nextStatus = skipEnabled ? 'skip' : 'miss';
+        } else if (currentStatus === 'skip') {
+            nextStatus = 'miss';
+        } else if (currentStatus === 'miss') {
+            nextStatus = 'miss'; // toggles off
+        }
+
+        try {
+            const result = await API.post('/api/entries', {
+                habit_id: habitId,
+                date: date,
+                status: nextStatus,
+            });
+
+            if (result.status === 'done') {
+                Animations.celebrate(cell);
+            }
+
+            await this.load();
+            await App.loadHabits();
+            this.render();
+
+        } catch (e) {
+            Toast.show('Failed to update: ' + e.message, 'error');
+        }
+    },
+
+    _dateStr(data, day) {
+        return `${data.year}-${String(data.month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    },
+
+    _formatMonthLabel() {
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        return `${months[this.currentMonth - 1]}, ${this.currentYear}`;
+    },
+
+    _escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+};
