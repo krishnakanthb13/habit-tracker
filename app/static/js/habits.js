@@ -218,7 +218,9 @@ const NoteModal = {
         document.getElementById('note-text').value = entry?.note || '';
 
         this.modal.hidden = false;
-        document.getElementById('note-text').focus();
+        setTimeout(() => {
+            document.getElementById('note-text').focus();
+        }, 200);
     },
 
     close() {
@@ -237,8 +239,35 @@ const NoteModal = {
                 note: note,
             });
             Toast.show('Note saved 📝', 'success');
+
+            // --- OPTIMISTIC UI UPDATE ---
+            // Find the cell and update the note dot
+            const cell = document.querySelector(`.day-cell[data-habit-id="${habitId}"][data-date="${date}"]`);
+            if (cell) {
+                const hasDot = cell.querySelector('.note-dot');
+                if (note && !hasDot) {
+                    const status = cell.dataset.status;
+                    let symbol = '';
+                    if (status === 'done') symbol = '✔';
+                    else if (status === 'skip') symbol = '➖';
+                    else if (status === 'miss') symbol = '❌';
+                    cell.innerHTML = `${symbol}<span class="note-dot"></span>`;
+                    cell.title += ' 📝';
+                } else if (!note && hasDot) {
+                    const status = cell.dataset.status;
+                    let symbol = '';
+                    if (status === 'done') symbol = '✔';
+                    else if (status === 'skip') symbol = '➖';
+                    else if (status === 'miss') symbol = '❌';
+                    cell.innerHTML = symbol;
+                    cell.title = cell.title.replace(' 📝', '');
+                }
+            }
+
             this.close();
-            await App.refresh();
+            // Fire refresh in background to stay consistent
+            App.refresh();
+
         } catch (e) {
             Toast.show('Failed to save note: ' + e.message, 'error');
         }

@@ -34,11 +34,11 @@ const App = {
             lucide.createIcons();
         }
 
-        // Load settings first (applies theme, toggles)
-        await Settings.loadSettings();
-
-        // Load data
-        await this.refresh();
+        // Load settings and data in parallel
+        await Promise.all([
+            Settings.loadSettings(),
+            this.refresh()
+        ]);
 
         // Help button
         document.getElementById('btn-help').addEventListener('click', () => {
@@ -69,9 +69,11 @@ const App = {
     },
 
     async refresh() {
-        await this.loadHabits();
-        await Calendar.load();
-        await Settings.loadArchivedHabits();
+        await Promise.all([
+            this.loadHabits(),
+            Calendar.load(),
+            Settings.loadArchivedHabits()
+        ]);
     }
 };
 

@@ -48,13 +48,13 @@ h4,
     justify-content: center;
     padding: 0.75rem 1.5rem;
     background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--glass-border);
     position: sticky;
     top: 0;
     z-index: 100;
-    transition: var(--transition-base);
+    transition: transform var(--transition-base), background var(--transition-base);
 }
 
 .navbar-large {
@@ -520,9 +520,7 @@ h4,
 .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 #settings-backdrop {
@@ -532,15 +530,17 @@ h4,
 .modal-content {
     position: relative;
     background: var(--glass-bg);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: var(--radius-lg);
     width: 100%;
     max-width: 500px;
-    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--glass-border);
-    animation: modalIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    animation: modalIn 0.2s ease-out;
     overflow: hidden;
     color: var(--text-primary);
+    will-change: transform, opacity;
+    contain: paint;
 }
 
 .modal-content.modal-small {
@@ -575,7 +575,7 @@ h4,
     justify-content: space-between;
     padding: 1.5rem 1.75rem;
     border-bottom: 1px solid var(--glass-border);
-    background: rgba(255, 255, 255, 0.015);
+    background: transparent;
 }
 
 .header-with-icon {
@@ -713,14 +713,16 @@ h4,
     max-width: 100vw;
     height: 100vh;
     background: var(--glass-bg);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-left: 1px solid var(--glass-border);
     z-index: 600;
     overflow-y: auto;
-    animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: -20px 0 50px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.2s ease-out;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
     scrollbar-width: none;
+    will-change: transform;
+    contain: paint;
 }
 
 .side-panel::-webkit-scrollbar {
@@ -905,18 +907,18 @@ h4,
     padding: 0.85rem 0.5rem;
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--bg-secondary);
     cursor: pointer;
     font-size: 0.85rem;
     font-weight: 800;
     color: var(--text-primary);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     position: relative;
     overflow: hidden;
 }
 
 .theme-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-hover);
     border-color: var(--accent);
     transform: translateY(-3px);
     box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
@@ -925,7 +927,7 @@ h4,
 
 .theme-btn.active {
     border-color: var(--accent);
-    background: var(--accent-faded);
+    background: var(--bg-primary);
     color: var(--accent);
     box-shadow: 0 0 15px var(--accent-faded);
     transform: translateY(-2px) scale(1.02);

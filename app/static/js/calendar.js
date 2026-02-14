@@ -172,7 +172,9 @@ const Calendar = {
         container.innerHTML = html;
         this._bindCellEvents();
         if (window.lucide) {
-            lucide.createIcons();
+            lucide.createIcons({
+                root: container
+            });
         }
         this._initSortable();
     },
@@ -260,6 +262,7 @@ const Calendar = {
     async _cycleStatus(habitId, date, currentStatus, cell) {
         const skipEnabled = this.data?.skip_enabled !== false;
 
+        // Calculate next status
         let nextStatus;
         if (!currentStatus || currentStatus === 'undefined' || currentStatus === '') {
             nextStatus = 'done';
@@ -271,6 +274,52 @@ const Calendar = {
             nextStatus = ''; // loop back to none
         }
 
+        // --- OPTIMISTIC UI UPDATE ---
+        const habitData = App.habitsData?.find(h => h.id === habitId);
+        const habitColor = habitData?.color || 'var(--status-done)';
+        const row = cell.closest('tr');
+        const achievedCell = row.querySelector('.col-achieved-val');
+        let achievedCount = parseInt(achievedCell.textContent) || 0;
+
+        // 1. Update Cell Status
+        cell.dataset.status = nextStatus || '';
+        cell.className = 'day-cell'; // Reset classes
+        if (cell.dataset.date === this.data.today && !nextStatus) cell.classList.add('day-today');
+        if (nextStatus) cell.classList.add(`status-${nextStatus}`);
+
+        // 2. Update Style (Color/Shadow)
+        if (nextStatus === 'done') {
+            cell.style.cssText = `background-color: ${habitColor} !important; box-shadow: 0 0 10px ${habitColor}66 !important;`;
+        } else {
+            cell.style.cssText = '';
+        }
+
+        // 3. Update Symbol
+        let symbol = '';
+        if (nextStatus === 'done') symbol = '✔';
+        else if (nextStatus === 'skip') symbol = '➖';
+        else if (nextStatus === 'miss') symbol = '❌';
+
+        // Persist Note Dot
+        const hasNote = cell.title.includes('📝'); // Simple check based on title
+        const noteDot = hasNote ? '<span class="note-dot"></span>' : '';
+        cell.innerHTML = symbol + noteDot;
+
+        // 4. Update Achieved Count (Manual Logic)
+        // If moving TO done: +1
+        // If moving FROM done: -1
+        if (nextStatus === 'done') achievedCount++;
+        else if (currentStatus === 'done') achievedCount--;
+
+        achievedCell.textContent = achievedCount;
+
+        // Optimistic goal check (simple)
+        const goalTarget = parseInt(row.querySelector('.col-goal-val').textContent);
+        if (goalTarget && achievedCount >= goalTarget) achievedCell.classList.add('met');
+        else achievedCell.classList.remove('met');
+
+
+        // --- API CALL ---
         try {
             const result = await API.post('/api/entries', {
                 habit_id: habitId,
@@ -282,12 +331,16 @@ const Calendar = {
                 Animations.celebrate(cell);
             }
 
-            await this.load();
-            await App.loadHabits();
-            this.render();
+            // Sync data quietly in background without full rerender
+            // We only need to update App.habitsData logic if we rely on it elsewhere immediately
+            // For now, doing nothing is fine until page refresh/navigate
 
         } catch (e) {
+            // Revert on failure (simple revert: refresh)
+            console.error('Update failed, reverting', e);
             Toast.show('Failed to update: ' + e.message, 'error');
+            await this.load(); // Fallback to full reload on error
+            this.render();
         }
     },
 

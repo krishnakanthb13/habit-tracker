@@ -102,8 +102,8 @@ const Settings = {
             document.getElementById('toggle-animations').checked = animEnabled;
             Animations.init(animEnabled);
 
-            // Load archived habits
-            await this.loadArchivedHabits();
+            // Load archived habits in background
+            this.loadArchivedHabits();
 
         } catch (e) {
             console.warn('Failed to load settings:', e);
@@ -252,13 +252,33 @@ const Settings = {
     },
 
     async unarchiveHabit(id) {
+        // Optimistic UI update
+        const listContainer = document.getElementById('archived-habits-list');
+        // Find the button with this ID onclick
+        // Simple search: iterate children or query selector
+        const buttons = listContainer.querySelectorAll('button');
+        let removed = false;
+        buttons.forEach(btn => {
+            if (btn.getAttribute('onclick')?.includes(`(${id})`)) {
+                btn.closest('.archived-item').remove();
+                removed = true;
+            }
+        });
+
+        if (removed && listContainer.children.length === 0) {
+            listContainer.innerHTML = '<p class="text-muted" style="font-size: 0.8rem;">No hidden habits.</p>';
+        }
+
         try {
             await API.post(`/api/habits/${id}/unarchive`, {});
             Toast.show('Habit restored! 👀', 'success');
-            await App.refresh();
-            await this.loadArchivedHabits();
+            // Background refresh to update calendar
+            App.refresh();
         } catch (e) {
+            console.error(e);
             Toast.show('Failed to restore habit: ' + e.message, 'error');
+            // Revert UI on error
+            this.loadArchivedHabits();
         }
     }
 };
