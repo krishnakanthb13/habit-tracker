@@ -20,7 +20,8 @@ The Habit Tracker was built to be **truly yours**. It is a local-first web appli
 - **Data-Positive Deletion (Hide vs. Delete)**: We encourage "Hiding" habits rather than deleting them. This preserves historical data and streaks while keeping the current view clean.
 - **Zero Configuration**: Single-click launch via `.bat` or `.sh` files. No database setup required.
 - **Transparency**: Streak calculations include "Skip" days as transparent (they don't count for/against the streak), respecting the reality of human life.
-- **Self-Healing**: Built-in database integrity checks and repair tools ensure data longevity. We prioritize **Safe Self-Healing**, meaning corrupted databases are moved to a `.corrupt` extension rather than deleted.
+- **Safe Self-Healing**: Built-in database integrity checks and repair tools ensure data longevity. We prioritize **Safe Self-Healing**, meaning corrupted databases are moved to a `.corrupt` extension rather than deleted.
+- **Progressive Enhancement (PWA)**: The app works perfectly as a standard web page but upgrades to a native-like experience on supported devices, with offline capabilities and installability.
 
 ## 4. Data Transparency & Insight
 

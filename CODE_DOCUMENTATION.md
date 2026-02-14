@@ -89,3 +89,12 @@ The Habit Tracker is optimized for low-resource local environments:
 4.  **Scoped Icon Rendering**: Lucide icon generation is scoped to specific containers (e.g., just the table body) to prevent expensive full-document DOM scans.
 5.  **SQLite WAL Mode**: The database operates in Write-Ahead Logging mode (`PRAGMA journal_mode=WAL`), allowing concurrent readers/writers.
 6.  **Index Optimization**: Composite indexes on `(habit_id, entry_date)` ensure O(log N) lookup speeds for even the densest habit histories.
+
+## 8. Progressive Web App (PWA) Architecture
+
+The application implements a "stale-while-revalidate" caching strategy via a Service Worker (`service-worker.js`) to ensure instant load times and offline availability.
+
+1.  **App Shell Model**: Core assets (CSS, JS, Fonts, Icons) are precached during the `install` phase of the Service Worker.
+2.  **Manifest Integration**: A `manifest.json` file is served from the root to define the app's name, theme colors (`#0f172a`), and display mode (`standalone`), allowing it to pass PWA installability criteria.
+3.  **Offline Fallback**: While the initial HTML is network-first, cached assets ensure the UI skeleton renders immediately even without a connection.
+

@@ -38,6 +38,7 @@ A **local-first, cross-platform Habit Tracker Web Application** designed for ult
 | **Self-Healing DB** | Integrity checks, robust auto-backups, and repair with `.corrupt` safety |
 | **Test Suite** | Comprehensive unit tests for streak logic and API stability |
 | **Keyboard Shortcuts** | `Ctrl+N` for new habits, `Esc` to close dialogs |
+| **PWA Support** | 📱 **Installable** on desktop/mobile for a native app experience with offline support |
 
 ---
 

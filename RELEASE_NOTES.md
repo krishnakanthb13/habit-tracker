@@ -1,5 +1,23 @@
 # Release Notes
 
+## [v0.1.6] - 2026-02-14
+
+### 🚀 New Features
+- **Progressive Web App (PWA)**: The Habit Tracker is now fully installable! 📱
+    - **Installable**: Add to Home Screen on iOS/Android or install as a standalone app on Chrome/Edge Desktop.
+    - **Offline Support**: View your habits and history even without an internet connection.
+    - **Native Feel**: Launches in its own window without the browser UI, with a custom splash screen.
+- **Service Worker Caching**: Implemented a "Stale-While-Revalidate" strategy for instant load times and reliable performance.
+
+### ⚡ Improvements
+- **Performance**: faster start-up time due to asset pre-caching.
+- **Manifest Integration**: Proper theme colors and icons for a polished OS integration.
+
+### 📚 Documentation
+- Updated **README** to reflect PWA capabilities.
+- Added **PWA Architecture** section to **CODE_DOCUMENTATION**.
+
+
 ## [v0.1.4] - 2026-02-14
 
 ### 🚀 New Features

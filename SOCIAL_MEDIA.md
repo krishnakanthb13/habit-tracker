@@ -1,5 +1,51 @@
 # Social Media Posts
 
+## [v0.1.6] - 2026-02-14
+
+### **LinkedIn**
+📱 My Habit Tracker is now a PWA (Progressive Web App)!
+
+I'm excited to announce v0.1.6, which transforms the project into a fully installable application.
+
+What does this mean?
+✅ **Offline Support**: You can view your streaks and history even without an internet connection.
+✅ **Installable**: Adds an icon to your home screen (iOS/Android) or desktop, launching in a standalone window for a native app feel.
+✅ **Performance**: Instant load times thanks to service worker caching.
+
+The project remains 100% local-first and privacy-focused, but now feels even more like a dedicated tool. Check out the implementation in the repo!
+
+#OpenSource #PWA #WebDev #Python #Flask #Privacy
+
+### **Reddit**
+**Title:** I upgraded my Python/Flask Habit Tracker to a PWA – Now Installable & Offline-Ready! (v0.1.6)
+
+Hey r/Python!
+
+Just pushed v0.1.6 of my local-first Habit Tracker. The big change? **It's now a Progressive Web App.**
+
+**New Features:**
+*   **Install Functionality**: You can "Add to Home Screen" on mobile or install on desktop to get a dedicated window without the browser chrome.
+*   **Offline Mode**: Service workers cache the app shell and assets, so the UI loads instantly even if you're offline.
+*   **Native Integration**: Custom manifest with theme colors and adaptive icons.
+
+Under the hood, it's still the same Flask + SQLite backend you know, but the frontend experience is now much snappier and app-like.
+
+I'd love feedback on the PWA implementation! Code is in the repo.
+
+### **X (Twitter)**
+My Habit Tracker is now a PWA! 📱🚀
+
+v0.1.6 brings:
+✅ Install on iOS/Android/Desktop
+✅ Offline Support 🔌
+✅ Instant Load Times ⚡
+
+The same privacy-first python backend, now with a native app feel.
+
+Check it out! 👇
+#OpenSource #PWA #Python #Flask #Dev
+
+
 ## [v0.1.4] - 2026-02-14
 
 ### **LinkedIn**
