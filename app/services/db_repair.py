@@ -14,15 +14,18 @@ def integrity_check(db_path):
     Returns:
         dict with 'ok' (bool) and 'details' (list of strings)
     """
+    conn = None
     try:
         conn = sqlite3.connect(db_path)
         cursor = conn.execute("PRAGMA integrity_check")
         results = [row[0] for row in cursor.fetchall()]
-        conn.close()
         ok = len(results) == 1 and results[0] == "ok"
         return {"ok": ok, "details": results}
     except Exception as e:
         return {"ok": False, "details": [str(e)]}
+    finally:
+        if conn:
+            conn.close()
 
 
 def create_backup(db_path, backup_dir):

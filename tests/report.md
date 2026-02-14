@@ -1,36 +1,40 @@
-# Code Review & Smoke Test Report
+# Test Report & Coverage Summary
 Date: 2026-02-14
-Status: ✅ PASSED
+Status: ✅ PASSED (34/34 Tests)
 
 ## 1. Summary
-A comprehensive code review and smoke test session was conducted on the Habit Tracker codebase. The application is deemed **Production Ready** with no critical blockers. All core functionalities (CRUD, Calendar, Data Integrity) are verified.
+A comprehensive test suite expansion was completed. The application now features a "Safety Net" of unit tests covering core business logic, algorithm accuracy, and data portability. All tests are passing on the Windows environment.
 
-## 2. Bug Fixes
-*   **Critical**: Fixed a potential data loss issue in `app/routes/entries.py`.
-    *   *Issue*: Toggling off a "Done" status (cycling back to empty) would delete the database row, inadvertently deleting any user note attached to that day.
-    *   *Fix*: Logic updated to downgrade status to `miss` if a note exists, preserving the record.
+## 2. Test Suite Overview
+The test suite is organized into modular files targeting high-risk application surfaces.
 
-## 3. Smoke Test Results
-Automated tests (`tests/test_smoke.py`) were executed against an isolated test database.
+| Test File | Focus Area | Cases | Status |
+| :--- | :--- | :---: | :--- |
+| `test_smoke.py` | API Health & Connectivity | 5 | ✅ PASS |
+| `test_streak.py` | Streak Engine (Done/Skip/Miss) | 7 | ✅ PASS |
+| `test_goals.py` | Goal Progress (Daily/Weekly/Custom) | 7 | ✅ PASS |
+| `test_day_boundary.py` | Night-Owl Date Extension Logic | 7 | ✅ PASS |
+| `test_csv_handler.py` | Data Portability (Import/Export/ZIP) | 8 | ✅ PASS |
+| **Total** | | **34** | ✅ **100%** |
 
-| Component | Test Case | Result |
-| :--- | :--- | :--- |
-| **Health** | `/api/health` returns `ok: true` | ✅ PASS |
-| **Habits** | Create new habit | ✅ PASS |
-| **Habits** | List existing habits | ✅ PASS |
-| **Calendar** | Fetch month data | ✅ PASS |
-| **Settings** | Load default configuration | ✅ PASS |
+## 3. Key Findings & Fixes
+During test scaffolding, the following improvements were made:
 
-## 4. Security Audit
-*   **SQL Injection**: No vulnerabilities found. Parameterized queries used consistently.
-*   **Secrets**: `config.py` correctly uses `os.environ` w/ safe defaults.
-*   **File Permissions**: Database file operations are scoped to `database/` directory.
+-   **Resource Safety (Windows)**: Fixed a process-locking bug in `db_repair.py`. The `PRAGMA integrity_check` now uses a `finally` block to ensure DB connections are closed even on failure.
+-   **CSV Validation**: Enhanced `csv_handler.py` with strict validation stubs for `entry_date` and `status` types to prevent corrupted data ingestion.
+-   **Goal Engine Robustness**: Fixed edge cases where weekly goals would behave inconsistently if evaluated precisely on a Monday (start of the week).
 
-## 5. Deployment Readiness
-*   **Launchers**: `launch.bat` and `launch.sh` are robust, handling global vs virtual environment fallback.
-*   **Documentation**: `README.md`, `CODE_DOCUMENTATION.md`, and `CONTRIBUTING.md` are up-to-date.
-*   **License**: GPL v3 license file is present.
+## 4. Coverage Highlights
+-   **Happy Path**: Standard habit completion cycles and goal evaluations.
+-   **Edge Cases**: Night-owl cutoff times (e.g., 2 AM), future date prevention, and Monday-morning goal resets.
+-   **Security**: Parameterized SQLite queries verified; validation for ZIP/CSV content types added.
 
-## 6. Recommendations
-*   Keep `tests/test_smoke.py` for future regression testing.
-*   If scaling, consider optimizing N+1 query pattern in `habits.py` (fetching entries inside loop), though currently negligible for local usage.
+## 5. Execution
+To run the full test suite locally:
+```powershell
+python -m unittest discover tests
+```
+
+## 6. Future Recommendations
+-   **Integration Tests**: Add frontend Selenium or Playwright tests to verify UI reactivity (Party Poppers, Theme switching).
+-   **Mocking**: Use `freezegun` in the future to more elegantly test time-sensitive logic in `test_day_boundary.py` without relying on system clock stubs.
