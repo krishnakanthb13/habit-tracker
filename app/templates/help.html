@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -29,7 +30,8 @@
             <h2><i data-lucide="target"></i> Habit Tracking</h2>
             <p><strong>What:</strong> Track daily habits with three states — <span
                     class="status-badge status-done">Done</span>, <span class="status-badge status-skip">Skipped</span>,
-                <span class="status-badge status-miss">Missed</span>.</p>
+                <span class="status-badge status-miss">Missed</span>.
+            </p>
             <p><strong>Why:</strong> Consistent tracking builds self-awareness. Seeing your streaks grow is powerful
                 motivation.</p>
             <p><strong>How:</strong> Click any cell in the calendar to cycle through states. Click the habit name to

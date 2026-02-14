@@ -29,13 +29,15 @@
         <div class="navbar-center">
             <button id="btn-prev-month" class="btn btn-icon" title="Previous Month"><i
                     data-lucide="chevron-left"></i></button>
-            <span id="current-month-label" class="month-label">February, 2026</span>
+            <span id="current-month-label" class="month-label clickable" title="Select month/year">February, 2026</span>
             <button id="btn-next-month" class="btn btn-icon" title="Next Month"><i
                     data-lucide="chevron-right"></i></button>
+            <button id="btn-today" class="btn btn-secondary btn-sm" style="margin-left: 0.5rem;"
+                title="Go to Current Month">Today</button>
         </div>
         <div class="navbar-right">
-            <button id="btn-settings" class="btn btn-icon" title="Settings"><i data-lucide="settings"></i></button>
-            <button id="btn-help" class="btn btn-icon" title="Help"><i data-lucide="help-circle"></i></button>
+            <button id="btn-settings" class="btn btn-premium" title="Settings"><i data-lucide="settings"></i></button>
+            <button id="btn-help" class="btn btn-premium" title="Help"><i data-lucide="help-circle"></i></button>
         </div>
     </header>
 
@@ -63,8 +65,11 @@
         <div class="modal-backdrop"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-habit-title">Add Habit</h2>
-                <button class="modal-close" data-close-modal>&times;</button>
+                <div class="header-with-icon">
+                    <i data-lucide="plus-circle" class="header-icon"></i>
+                    <h2 id="modal-habit-title">Add Habit</h2>
+                </div>
+                <button class="modal-close" data-close-modal><i data-lucide="x"></i></button>
             </div>
             <form id="form-habit" class="modal-body">
                 <input type="hidden" id="habit-id">
@@ -116,8 +121,11 @@
         <div class="modal-backdrop"></div>
         <div class="modal-content modal-small">
             <div class="modal-header">
-                <h2>Add Note</h2>
-                <button class="modal-close" data-close-modal>&times;</button>
+                <div class="header-with-icon">
+                    <i data-lucide="sticky-note" class="header-icon"></i>
+                    <h2>Add Note</h2>
+                </div>
+                <button class="modal-close" data-close-modal><i data-lucide="x"></i></button>
             </div>
             <div class="modal-body">
                 <textarea id="note-text" rows="4" placeholder="Write a note for this day..."
@@ -134,11 +142,56 @@
         </div>
     </div>
 
+    <!-- Month/Year Picker Modal -->
+    <div id="modal-picker" class="modal" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <div class="header-with-icon">
+                    <i data-lucide="calendar" class="header-icon"></i>
+                    <h2>Select Date</h2>
+                </div>
+                <button class="modal-close" data-close-modal><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Year</label>
+                    <div id="picker-year-grid" class="picker-grid year-grid"></div>
+                </div>
+                <div class="form-group">
+                    <label>Month</label>
+                    <div id="picker-month-grid" class="picker-grid month-grid">
+                        <button class="picker-btn" data-value="1">Jan</button>
+                        <button class="picker-btn" data-value="2">Feb</button>
+                        <button class="picker-btn" data-value="3">Mar</button>
+                        <button class="picker-btn" data-value="4">Apr</button>
+                        <button class="picker-btn" data-value="5">May</button>
+                        <button class="picker-btn" data-value="6">Jun</button>
+                        <button class="picker-btn" data-value="7">Jul</button>
+                        <button class="picker-btn" data-value="8">Aug</button>
+                        <button class="picker-btn" data-value="9">Sep</button>
+                        <button class="picker-btn" data-value="10">Oct</button>
+                        <button class="picker-btn" data-value="11">Nov</button>
+                        <button class="picker-btn" data-value="12">Dec</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-close-modal>Cancel</button>
+                <button class="btn btn-primary" id="btn-apply-picker">Go to Date</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Panel (Slide-in) -->
+    <div id="settings-backdrop" class="modal-backdrop" hidden></div>
     <aside id="settings-panel" class="side-panel" hidden>
         <div class="panel-header">
-            <h2>Settings</h2>
-            <button class="modal-close" id="btn-close-settings">&times;</button>
+            <div class="header-with-icon">
+                <i data-lucide="settings-2" class="header-icon"></i>
+                <h2>Settings</h2>
+            </div>
+            <button class="modal-close" id="btn-close-settings"><i data-lucide="x"></i></button>
         </div>
         <div class="panel-body">
             <!-- Theme -->
@@ -146,19 +199,34 @@
                 <h3><i data-lucide="palette"></i> Theme</h3>
                 <div class="theme-grid" id="theme-selector">
                     <button class="theme-btn" data-theme="light" title="Light">
-                        <span class="theme-preview light"></span>Light
+                        <div class="theme-preview pixel-palette light">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        Light
                     </button>
                     <button class="theme-btn" data-theme="dark" title="Dark">
-                        <span class="theme-preview dark"></span>Dark
+                        <div class="theme-preview pixel-palette dark">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        Dark
                     </button>
                     <button class="theme-btn" data-theme="pure-dark" title="Pure Dark">
-                        <span class="theme-preview pure-dark"></span>Pure Dark
+                        <div class="theme-preview pixel-palette pure-dark">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        Pure Dark
                     </button>
                     <button class="theme-btn" data-theme="ocean" title="Ocean">
-                        <span class="theme-preview ocean"></span>Ocean
+                        <div class="theme-preview pixel-palette ocean">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        Ocean
                     </button>
                     <button class="theme-btn" data-theme="sunset" title="Sunset">
-                        <span class="theme-preview sunset"></span>Sunset
+                        <div class="theme-preview pixel-palette sunset">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        Sunset
                     </button>
                 </div>
             </div>
@@ -207,7 +275,7 @@
             <div class="setting-group">
                 <h3><i data-lucide="database"></i> Data</h3>
                 <div class="btn-group-vertical">
-                    <button class="btn btn-secondary" id="btn-export">📤 Export All Data (CSV)</button>
+                    <button class="btn btn-secondary" id="btn-export">📤 CSV Backup</button>
                     <label class="btn btn-secondary file-upload-btn">
                         📥 Import CSV
                         <input type="file" id="import-file" accept=".csv,.zip" hidden>

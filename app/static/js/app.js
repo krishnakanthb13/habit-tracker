@@ -42,7 +42,7 @@ const App = {
 
         // Help button
         document.getElementById('btn-help').addEventListener('click', () => {
-            window.open('/help', '_blank');
+            window.location.href = '/help';
         });
 
         // Keyboard shortcuts

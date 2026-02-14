@@ -52,14 +52,28 @@ const Settings = {
 
         // Repair
         document.getElementById('btn-repair').addEventListener('click', () => this._repair());
+
+        // Backdrop click to close
+        document.getElementById('settings-backdrop').addEventListener('click', () => this.close());
     },
 
     toggle() {
-        this.panel.hidden = !this.panel.hidden;
+        const isHidden = this.panel.hidden;
+        if (isHidden) {
+            this.open();
+        } else {
+            this.close();
+        }
+    },
+
+    open() {
+        this.panel.hidden = false;
+        document.getElementById('settings-backdrop').hidden = false;
     },
 
     close() {
         this.panel.hidden = true;
+        document.getElementById('settings-backdrop').hidden = true;
     },
 
     async loadSettings() {
@@ -108,8 +122,8 @@ const Settings = {
     async _export() {
         try {
             Toast.show('Preparing export...', 'info');
-            await API.download('/api/export', `habit_data_${Date.now()}.zip`);
-            Toast.show('Data exported! 📤', 'success');
+            const result = await API.get('/api/export');
+            Toast.show(`Exported to: ${result.filename} 📤`, 'success');
         } catch (e) {
             Toast.show('Export failed: ' + e.message, 'error');
         }
