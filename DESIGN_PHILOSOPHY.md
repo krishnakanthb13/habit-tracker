@@ -22,7 +22,11 @@ The Habit Tracker was built to be **truly yours**. It is a local-first web appli
 - **Transparency**: Streak calculations include "Skip" days as transparent (they don't count for/against the streak), respecting the reality of human life.
 - **Self-Healing**: Built-in database integrity checks and repair tools ensure data longevity. We prioritize **Safe Self-Healing**, meaning corrupted databases are moved to a `.corrupt` extension rather than deleted.
 
-## 4. Target Audience & Use Cases
+## 4. Data Transparency & Insight
+
+We believe that data isn't just for storage; it's for **understanding**. The **Analytics Dashboard** transforms raw logs into visual insights. By showing trends (Activity) and reliability (Consistency), we empower users to see the "long game," turning data into actionable motivation without compromising privacy.
+
+## 5. Target Audience & Use Cases
 
 - **Privacy-Conscious Individuals**: People who want to track personal habits/notes without cloud exposure.
 - **"Late Owls"**: Users who stay up past midnight and need the app to reflect their actual "awake day" via Day Extension logic.

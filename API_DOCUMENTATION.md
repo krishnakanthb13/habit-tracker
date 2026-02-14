@@ -197,7 +197,23 @@ Endpoints for database maintenance.
 
 ---
 
-## 8. Page Routes
+## 8. Analytics API
+Endpoints for data visualization and trends.
+
+### `GET /analytics`
+**Description**: Retrieves aggregated analytics data, including 30-day activity trends and habit consistency ranking.
+**Response**: `200 OK`
+```json
+{
+  "summary": { "total_habits": 5, "total_completions": 150, "best_streak": 20 },
+  "daily_trend": [ { "date": "2026-02-14", "count": 3 }, ... ],
+  "habit_performance": [ { "name": "Exercise", "completion_rate": 95, "current_streak": 5, ... }, ... ]
+}
+```
+
+---
+
+## 9. Page Routes
 These routes serve the HTML frontend.
 
 ### `GET /`
@@ -205,3 +221,6 @@ These routes serve the HTML frontend.
 
 ### `GET /help`
 **Description**: Serves the help and documentation page (`help.html`).
+
+### `GET /analytics`
+**Description**: Serves the interactive analytics dashboard (`analytics.html`).

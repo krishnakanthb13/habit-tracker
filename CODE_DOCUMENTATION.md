@@ -8,13 +8,14 @@ This document provides a technical overview of the Habit Tracker codebase, its a
 habit-tracker/
 ├── app/                    # Main Flask application
 │   ├── routes/             # API Endpoints (Blueprints)
+│   │   ├── analytics.py    # **Aggregated trend & performance data**
 │   │   ├── calendar.py     # Month-view data aggregation
 │   │   ├── data.py         # CSV Import/Export
 │   │   ├── entries.py      # Habit status toggling & notes
 │   │   ├── goals_routes.py # Goal CRUD
 │   │   ├── habits.py       # Habit CRUD
 │   │   ├── health.py       # DB integrity & repair
-│   │   ├── pages.py        # Static page serving (Dashboard/Help)
+│   │   ├── pages.py        # Static page serving (Dashboard/Help/Analytics)
 │   │   └── settings.py     # App settings persistence
 │   ├── services/           # Business Logic
 │   │   ├── csv_handler.py   # ZIP/CSV packaging & parsing
@@ -24,7 +25,7 @@ habit-tracker/
 │   │   └── streak.py        # Algorithmic streak calculation
 │   ├── static/             # Frontend Assets
 │   │   ├── css/            # base.css, themes.css, animations.css
-│   │   ├── js/             # api.js, calendar.js, habits.js, etc.
+│   │   ├── js/             # analytics.js, api.js, calendar.js, habits.js, etc.
 │   │   └── img/            # favicon.svg
 │   ├── templates/          # Jinja2 Templates (index.html, help.html)
 │   ├── __init__.py         # App factory & Blueprint registration
