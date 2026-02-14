@@ -67,7 +67,7 @@ def _apply_schema(conn):
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
             habit_id    INTEGER NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
             entry_date  TEXT NOT NULL,
-            status      TEXT NOT NULL CHECK(status IN ('done', 'skip', 'miss')),
+            status      TEXT CHECK(status IN ('done', 'skip', 'miss')),
             note        TEXT DEFAULT '',
             created_at  TEXT DEFAULT (datetime('now')),
             UNIQUE(habit_id, entry_date)
@@ -104,7 +104,7 @@ def _apply_schema(conn):
         INSERT OR IGNORE INTO settings (key, value) VALUES ('animations_enabled', 'true');
 
         -- Record schema version
-        INSERT OR IGNORE INTO schema_version (version) VALUES (1);
+        INSERT OR IGNORE INTO schema_version (version) VALUES (2);
     """)
     conn.commit()
 
@@ -114,10 +114,24 @@ def _run_migrations(conn):
     cursor = conn.execute("SELECT MAX(version) FROM schema_version")
     current_version = cursor.fetchone()[0] or 0
 
-    # Add future migrations here as:
-    # if current_version < 2:
-    #     conn.executescript("ALTER TABLE ...")
-    #     conn.execute("INSERT INTO schema_version (version) VALUES (2)")
-    #     conn.commit()
-
-    pass
+    if current_version < 2:
+        # Migration to allow NULL status (SQLite requires table recreation for this)
+        conn.executescript("""
+            CREATE TABLE entries_new (
+                id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                habit_id    INTEGER NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
+                entry_date  TEXT NOT NULL,
+                status      TEXT CHECK(status IN ('done', 'skip', 'miss')),
+                note        TEXT DEFAULT '',
+                created_at  TEXT DEFAULT (datetime('now')),
+                UNIQUE(habit_id, entry_date)
+            );
+            INSERT INTO entries_new SELECT id, habit_id, entry_date, status, note, created_at FROM entries;
+            DROP TABLE entries;
+            ALTER TABLE entries_new RENAME TO entries;
+            CREATE INDEX idx_entries_habit_date ON entries(habit_id, entry_date);
+            CREATE INDEX idx_entries_date ON entries(entry_date);
+            
+            UPDATE schema_version SET version = 2;
+        """)
+        conn.commit()

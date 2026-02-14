@@ -195,10 +195,15 @@ body {
 
 /* ---- TABLE-BASED CALENDAR ---- */
 .calendar-table-wrapper {
-    overflow-x: auto;
+    overflow: auto;
+    /* Enable both horizontal and vertical scrolling */
+    max-height: calc(100vh - 120px);
+    /* Leave room for navbar and margin */
     border: 1px solid var(--border-color);
     border-radius: 6px;
     background: var(--bg-elevated);
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-faded) transparent;
 }
 
 .calendar-table {
@@ -213,8 +218,10 @@ body {
     border: 1px solid var(--border-color);
     text-align: center;
     padding: 0;
-    height: 26px;
-    min-width: 26px;
+    height: 32px;
+    min-width: 32px;
+    width: 32px;
+    /* Fixed width for day columns */
     vertical-align: middle;
     color: var(--text-primary);
 }

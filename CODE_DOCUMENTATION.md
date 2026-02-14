@@ -89,3 +89,13 @@ graph TD
 -   **Frontend**: Modern Browser (ES6+ support required).
 -   **Environment**: Cross-platform (Windows/Linux/macOS).
 ```
+
+## 7. Performance Considerations
+
+The Habit Tracker is optimized for low-resource local environments:
+
+1.  **SQLite WAL Mode**: The database operates in Write-Ahead Logging mode (`PRAGMA journal_mode=WAL`), which allows multiple readers and one writer concurrently, significantly improving responsiveness during data-heavy operations like imports or large streak calculations.
+2.  **Stat Aggregation**: Monthly data for the calendar is aggregated in a single backend pass (`calendar.py`) to minimize the number of API round-trips.
+3.  **Frontend Rendering**: The calendar uses a reactive-style rendering approach where only the affected cells or rows are updated upon interaction, preventing flickering and reducing DOM overhead.
+4.  **Bulk Export/Import**: Data portability is handled via compressed ZIP archives containing CSV files, ensuring that even multi-year habit data remains manageable in size.
+5.  **Index Optimization**: High-frequency queries (like streak lookups and chronological entry views) are backed by composite indexes on `(habit_id, entry_date)` to maintain O(log N) lookup speeds.

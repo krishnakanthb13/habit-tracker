@@ -199,7 +199,7 @@ const Calendar = {
         } else if (currentStatus === 'skip') {
             nextStatus = 'miss';
         } else if (currentStatus === 'miss') {
-            nextStatus = 'miss'; // toggles off
+            nextStatus = ''; // loop back to none
         }
 
         try {

@@ -34,8 +34,12 @@ def set_entry():
     entry_date = data.get("date") or get_effective_today(settings)
     new_status = data.get("status", "done")
 
-    if new_status not in ("done", "skip", "miss"):
+    if new_status and new_status not in ("done", "skip", "miss"):
         return jsonify({"error": "Invalid status"}), 400
+
+    # Ensure empty string is treated as None
+    if not new_status:
+        new_status = None
 
     # Check if skip is disabled
     skip_enabled = settings.get("skip_enabled", "true") == "true"
@@ -49,19 +53,17 @@ def set_entry():
     ).fetchone()
 
     if existing:
-        if existing["status"] == new_status:
-            # Toggle off
+        if existing["status"] == new_status or (not existing["status"] and not new_status):
+            # Toggle off (setting same status or setting None when already None)
             if existing["note"]:
-                # If note exists, preserve it by downgrading status to 'miss'
-                # (unless it was already 'miss', in which case we do nothing or could delete?
-                # But safer to keep the note visible as 'missed' day with note)
-                db.execute("UPDATE entries SET status = 'miss' WHERE id = ?", (existing["id"],))
+                # If note exists, set status to NULL but keep entry
+                db.execute("UPDATE entries SET status = NULL WHERE id = ?", (existing["id"],))
                 db.commit()
                 return jsonify({
                     "action": "updated",
                     "habit_id": habit_id,
                     "date": entry_date,
-                    "status": "miss",
+                    "status": None,
                 })
             else:
                 # No note, acceptable to delete
@@ -74,7 +76,7 @@ def set_entry():
                     "status": None,
                 })
         else:
-            # Update to new status
+            # Update to new status (can be None)
             db.execute(
                 "UPDATE entries SET status = ? WHERE id = ?",
                 (new_status, existing["id"]),
@@ -141,9 +143,9 @@ def update_note_by_habit_date():
             (note, existing["id"]),
         )
     else:
-        # Create a placeholder entry with no status — just the note
+        # Create a placeholder entry with NO status — just the note
         db.execute(
-            "INSERT INTO entries (habit_id, entry_date, status, note) VALUES (?, ?, 'miss', ?)",
+            "INSERT INTO entries (habit_id, entry_date, status, note) VALUES (?, ?, NULL, ?)",
             (habit_id, entry_date, note),
         )
     db.commit()
