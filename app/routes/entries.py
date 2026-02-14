@@ -50,15 +50,29 @@ def set_entry():
 
     if existing:
         if existing["status"] == new_status:
-            # Toggle off — remove the entry
-            db.execute("DELETE FROM entries WHERE id = ?", (existing["id"],))
-            db.commit()
-            return jsonify({
-                "action": "cleared",
-                "habit_id": habit_id,
-                "date": entry_date,
-                "status": None,
-            })
+            # Toggle off
+            if existing["note"]:
+                # If note exists, preserve it by downgrading status to 'miss'
+                # (unless it was already 'miss', in which case we do nothing or could delete?
+                # But safer to keep the note visible as 'missed' day with note)
+                db.execute("UPDATE entries SET status = 'miss' WHERE id = ?", (existing["id"],))
+                db.commit()
+                return jsonify({
+                    "action": "updated",
+                    "habit_id": habit_id,
+                    "date": entry_date,
+                    "status": "miss",
+                })
+            else:
+                # No note, acceptable to delete
+                db.execute("DELETE FROM entries WHERE id = ?", (existing["id"],))
+                db.commit()
+                return jsonify({
+                    "action": "cleared",
+                    "habit_id": habit_id,
+                    "date": entry_date,
+                    "status": None,
+                })
         else:
             # Update to new status
             db.execute(
