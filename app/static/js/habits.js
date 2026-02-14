@@ -183,6 +183,7 @@ const NoteModal = {
         this.modal.querySelector('.modal-backdrop').addEventListener('click', () => this.close());
 
         document.getElementById('btn-save-note').addEventListener('click', () => this.save());
+        document.getElementById('btn-clear-note').addEventListener('click', () => this.clear());
     },
 
     open(habitId, date) {
@@ -219,5 +220,11 @@ const NoteModal = {
         } catch (e) {
             Toast.show('Failed to save note: ' + e.message, 'error');
         }
+    },
+
+    async clear() {
+        if (!confirm('Are you sure you want to clear this note?')) return;
+        document.getElementById('note-text').value = '';
+        await this.save();
     }
 };

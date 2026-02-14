@@ -74,7 +74,10 @@ def repair_database(db_path, backup_dir):
         details.append(f"Exported {len(dump)} SQL statements")
 
         # Recreate database
-        os.remove(db_path)
+        corrupt_path = f"{db_path}.corrupt_{timestamp}"
+        shutil.move(db_path, corrupt_path)
+        details.append(f"Moved corrupted DB to: {os.path.basename(corrupt_path)}")
+        
         new_conn = sqlite3.connect(db_path)
         new_conn.executescript("\n".join(dump))
         new_conn.close()

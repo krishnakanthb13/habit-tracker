@@ -28,6 +28,11 @@ def list_habits():
         "SELECT * FROM habits WHERE archived = 0 ORDER BY position ASC, id ASC"
     ).fetchall()
 
+    # NOTE: Technical Debt - N+1 Query Pattern
+    # This loop executes multiple queries (streak, goal, today_status) for each habit.
+    # While inefficient for large-scale SaaS, it is a conscious design choice for this
+    # local app to keep service logic simple and modular. For hundreds of habits, 
+    # these should be refactored into a single bulk-fetch query.
     result = []
     for habit in habits:
         streaks = calculate_streaks(db, habit["id"], skip_enabled, effective_today)

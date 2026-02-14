@@ -15,16 +15,17 @@ A **local-first, cross-platform Habit Tracker Web Application** designed for ult
 | Feature | Description |
 |---------|-------------|
 | **Three-State Tracking** | ✔️ Done · ➖ Skipped · ❌ Missed — cycle through by clicking |
-| **Monthly Calendar** | Visual table grid showing all habits for the month with color-coded status |
+| **Monthly Calendar** | Visual table grid with **sticky headers & columns** for seamless scrolling |
 | **Streak Analytics** | Current streak 🔥, best streak ⭐, total completions per habit |
 | **Goal Setting** | Daily, weekly (X times/week), or custom period goals |
 | **5 Themes** | Light, Dark, Pure Dark (OLED), Ocean, Sunset — all with high visibility |
 | **Day Extension** | Extend "today" past midnight (configurable up to 6 AM) for night owls |
 | **Skip Status** | Enable/disable skipped-day status (marked as `➖`, doesn't break streaks) |
-| **Notes** | Right-click any calendar cell to add a detailed note/log |
-| **Party Popper** | 🎉 Confetti physcis celebration on habit completion (toggleable) |
+| **Notes** | Right-click any calendar cell to add or **clear** detailed notes/logs |
+| **Party Popper** | 🎉 Confetti physics celebration on habit completion (toggleable) |
 | **Import/Export** | Full CSV export (ZIP) and import with preview for easy backups |
-| **Self-Healing DB** | Integrity checks, auto-backups, and repair mechanism using SQLite dump |
+| **Self-Healing DB** | Integrity checks, robust auto-backups, and repair with `.corrupt` safety |
+| **Test Suite** | Comprehensive unit tests for streak logic and API stability |
 | **Keyboard Shortcuts** | `Ctrl+N` for new habits, `Esc` to close dialogs |
 
 ---
@@ -67,6 +68,7 @@ chmod +x launch.sh
 habit-tracker/
 ├── app/                    # Main Flask application
 ├── database/               # Local SQLite storage & backups
+├── tests/                  # API and streak engine test suite
 ├── launch.bat              # One-click Windows launcher
 ├── launch.sh               # One-click Unix launcher
 ├── requirements.txt        # Flask and dependencies

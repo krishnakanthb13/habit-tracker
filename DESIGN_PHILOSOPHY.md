@@ -16,7 +16,7 @@ The Habit Tracker was built to be **truly yours**. It is a local-first web appli
 - **Local-First & Privacy**: Data never leaves your machine. SQLite is used for high-performance, single-user storage.
 - **Zero Configuration**: Single-click launch via `.bat` or `.sh` files. No database setup required.
 - **Transparency**: Streak calculations include "Skip" days as transparent (they don't count for/against the streak), respecting the reality of human life.
-- **Self-Healing**: Built-in database integrity checks and repair tools to ensure longevity of your data.
+- **Self-Healing**: Built-in database integrity checks and repair tools ensure data longevity. We prioritize **Safe Self-Healing**, meaning corrupted databases are moved to a `.corrupt` extension rather than deleted, allowing for manual recovery as a last resort.
 - **Rich Aesthetics**: A "premium" look regardless of the theme (Dark, Ocean, Sunset), using modern CSS variables and smooth animations.
 
 ## 4. Target Audience & Use Cases

@@ -31,6 +31,9 @@ habit-tracker/
 │   ├── config.py           # Path & Port configuration
 │   └── database.py         # SQLite connection & migration engine
 ├── database/               # Local SQLite storage (Gitignored)
+├── tests/                  # Test Suite
+│   ├── test_smoke.py       # API stability & health tests
+│   └── test_streak.py      # Streak engine unit tests
 ├── launch.bat              # Windows Launcher
 ├── launch.sh               # Linux/macOS Launcher
 ├── run.py                  # Entry Point script
@@ -53,8 +56,8 @@ The application follows a **Modular Monolith** pattern using Flask Blueprints. I
 | `streak.py` | Calculates current/best streaks | `calculate_streaks()` |
 | `goals.py` | Evaluates daily/weekly/custom goals | `evaluate_goal()` |
 | `day_boundary.py` | Handles "cutoff hour" extensions | `get_effective_date()` |
-| `csv_handler.py` | ZIP based data portable | `export_to_zip()`, `import_from_csv()` |
-| `db_repair.py` | Self-healing database mechanism | `repair_database()` |
+| `csv_handler.py` | ZIP based data portability | `export_to_zip()`, `import_from_csv()` |
+| `db_repair.py` | Self-healing DB mechanism | `repair_database()` - Now moves corrupt files to `.corrupt` extension. |
 
 ## 4. Data Flow
 
@@ -71,6 +74,8 @@ graph TD
 
 1.  **Status Toggle**: User clicks a cell -> `calendar.js` -> `API.post('/api/entries')` -> `entries.py` -> `streak.py` updates stats -> Response returns updated UI state.
 2.  **Date Logic**: All entries use `day_boundary.py` to determine if a 2 AM action belongs to "Today" or "Yesterday" based on user settings.
+3.  **Note Management**: Users can add or **clear** notes. Clearing a note via the UI calls `entries.py` which preserves the entry status while wiping the description.
+4.  **UI Stickiness**: The calendar table uses `position: sticky` for the first column and headers, effectively locking the habit names and dates during horizontal/vertical scrolling.
 
 ## 5. Execution Flow
 
